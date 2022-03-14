@@ -30,21 +30,10 @@ export class AuthController {
     return this.authService.signIn(signInDto);
   }
 
-  // @UseGuards(AuthGuard())
-  // @Post('/upload')
-  // @UseInterceptors(FileInterceptor('file', storage))
-  // uploadFile(@UploadedFile() file, @Request() req): Promise<object> {
-  //   const user: User = req.user;
-  //   console.log(user);
-  //   return file.path;
-  // }
-  @UseGuards(AuthGuard())
   @Post('upload')
   @UseInterceptors(FileInterceptor(`ProfilePicture`, storage))
-  addProfilePic(@UploadedFile() file): Promise<void> {
-    console.log(file.path);
+  addProfilePic(@UploadedFile() file): Promise<any> {
     return file.path;
-    // return this.userservice.addProfilePic(authCredentialsDto);
   }
   ////////////////////////////////////////////////////
   // return (
