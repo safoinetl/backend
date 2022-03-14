@@ -33,8 +33,8 @@ export class UserController {
     return this.userService.findAll();
   }
   @Get(':id')
-  findOne(@Param('id') AuthCredentialsDto: AuthCredentialsDto) {
-    return this.userService.findOne(AuthCredentialsDto);
+  findOne(@Param('id') user_id: string) {
+    return this.userService.findOne(user_id);
   }
 
   @Patch(':id')

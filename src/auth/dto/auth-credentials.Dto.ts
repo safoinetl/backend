@@ -11,8 +11,8 @@ import {
 import { role } from '../enum/Role-Enum';
 import { CustomMatchPasswords } from '../validation-password';
 export class AuthCredentialsDto {
-  @IsString()
-  user_id: string;
+  // @IsString()
+  // user_id: string;
   @IsString()
   @IsEmail()
   email: string;

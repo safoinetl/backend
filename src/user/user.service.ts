@@ -19,8 +19,7 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  async findOne(AuthCredentialsDto: AuthCredentialsDto) {
-    const { user_id } = AuthCredentialsDto;
+  async findOne(user_id: string) {
     const getUser = await this.userModel.findOne({ where: { user_id } });
     if (!getUser){
       throw new NotFoundException();
