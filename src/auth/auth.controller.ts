@@ -1,18 +1,18 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UploadedFiles } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Post, Body, Request } from '@nestjs/common';
+import { Post, Body, Request,Get } from '@nestjs/common';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { signInDto } from './dto/signin.Dto';
 import { UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { UploadedFile } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/schemas/user.schema';
+import { UserGuard } from './decorators/user-decorator';
 export const storage = {
   storage: diskStorage({
-    destination: './uploads/profileimages',
+    destination: './uploads',
   }),
 };
 @Controller('auth')
@@ -29,12 +29,8 @@ export class AuthController {
   signin(@Body() signInDto: signInDto): Promise<{ accessToken }> {
     return this.authService.signIn(signInDto);
   }
+ 
 
-  @Post('upload')
-  @UseInterceptors(FileInterceptor(`ProfilePicture`, storage))
-  addProfilePic(@UploadedFile() file): Promise<any> {
-    return file.path;
-  }
   ////////////////////////////////////////////////////
   // return (
   //   this.authService

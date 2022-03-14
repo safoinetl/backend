@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { UserDocument } from 'src/schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
+import { Model } from 'mongoose';
+import { AuthCredentialsDto } from 'src/auth/dto/auth-credentials.dto';
+import { NotFoundError } from 'rxjs';
+import { NotFoundException } from '@nestjs/common';
 @Injectable()
 export class UserService {
+  constructor(@InjectModel('user') private userModel: Model<UserDocument>) {}
+
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
@@ -12,8 +19,14 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(AuthCredentialsDto: AuthCredentialsDto) {
+    const { user_id } = AuthCredentialsDto;
+    const getUser = await this.userModel.findOne({ where: { user_id } });
+    if (!getUser){
+      throw new NotFoundException();
+    }
+    delete getUser.password;
+    return getUser;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

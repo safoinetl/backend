@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Role } from 'src/auth/enum/Role-Enum';
+import { role } from 'src/auth/enum/Role-Enum';
 import { BeforeInsert } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
@@ -29,20 +29,20 @@ export class User {
   @Prop({ required: true, unique: true })
   phone: number;
   @Prop()
-  interest: [];
+  interests: [];
   @Prop()
-  speciality: [];
+  specialities: [];
   @BeforeInsert()
   emailToLowerCase() {
     this.email = this.email.toLowerCase();
   }
   @Prop({ nullable: true })
   ProfilePicture: string;
-  @Prop({ type: String, enum: Role, default: 'user' })
-  Role: Role;
-  @Prop({ nullable: true, unique: true })
+  @Prop({ type: String, enum: role, default: 'user' })
+  role: role;
+  @Prop()
   Brand_Name: string;
-  @Prop({ nullable: true, unique: true })
+  @Prop()
   M_F: string;
   @Prop()
   short_bio: string;

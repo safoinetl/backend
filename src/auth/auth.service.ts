@@ -13,7 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserDocument } from 'src/schemas/user.schema';
 import { signInDto } from './dto/signin.Dto';
-import { Role } from './enum/Role-Enum';
+import { role } from './enum/Role-Enum';
 import { JwtPayload } from 'src/Jwt/jwt-payload';
 @Injectable()
 export class AuthService {
@@ -30,8 +30,8 @@ export class AuthService {
       name,
       surname,
       phone,
-      interest,
-      speciality,
+      interests,
+      specialities,
       Role,
       Brand_Name,
       M_F,
@@ -46,8 +46,8 @@ export class AuthService {
       name,
       surname,
       phone,
-      interest,
-      speciality,
+      interests,
+      specialities,
       Role,
       Brand_Name,
       M_F,

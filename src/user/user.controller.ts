@@ -1,9 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFiles,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { AuthCredentialsDto } from 'src/auth/dto/auth-credentials.dto';
+import { UseGuards } from '@nestjs/common';
+import { UserGuard } from 'src/auth/decorators/user-decorator';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
+@UseGuards(UserGuard())
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -16,10 +32,9 @@ export class UserController {
   findAll() {
     return this.userService.findAll();
   }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  findOne(@Param('id') AuthCredentialsDto: AuthCredentialsDto) {
+    return this.userService.findOne(AuthCredentialsDto);
   }
 
   @Patch(':id')
@@ -30,5 +45,15 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
+  }
+  @Post('/upload')
+  @UseInterceptors(FilesInterceptor('files'))
+  uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
+    console.log(files);
+  }
+  @Get('/upload')
+  @UseInterceptors(FilesInterceptor('files'))
+  GetFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
+    console.log(files);
   }
 }

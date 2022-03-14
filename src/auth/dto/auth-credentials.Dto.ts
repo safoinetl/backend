@@ -8,9 +8,11 @@ import {
   IsPhoneNumber,
   IsOptional,
 } from 'class-validator';
-import { Role } from '../enum/Role-Enum';
+import { role } from '../enum/Role-Enum';
 import { CustomMatchPasswords } from '../validation-password';
 export class AuthCredentialsDto {
+  @IsString()
+  user_id: string;
   @IsString()
   @IsEmail()
   email: string;
@@ -26,6 +28,7 @@ export class AuthCredentialsDto {
   @IsString()
   @MinLength(8)
   @MaxLength(32)
+  @Matches('password')
   @Validate(CustomMatchPasswords, ['password'])
   passwordconfirm: string;
   @IsString()
@@ -35,13 +38,13 @@ export class AuthCredentialsDto {
   @IsPhoneNumber()
   phone: number;
   @IsString()
-  interest: [];
+  interests: [];
   @IsString()
-  speciality: [];
+  specialities: [];
   @IsString()
   ProfilePicture: string;
   @IsString()
-  Role: Role;
+  Role: role;
   @IsOptional()
   Brand_Name?: string;
   @IsOptional()
