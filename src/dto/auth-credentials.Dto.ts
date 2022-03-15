@@ -9,10 +9,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { role } from '../enum/Role-Enum';
-import { CustomMatchPasswords } from '../validation-password';
 export class AuthCredentialsDto {
-  // @IsString()
-  // user_id: string;
   @IsString()
   @IsEmail()
   email: string;
@@ -24,13 +21,6 @@ export class AuthCredentialsDto {
     message: 'password is weak',
   })
   password: string;
-
-  @IsString()
-  @MinLength(8)
-  @MaxLength(32)
-  @Matches('password')
-  @Validate(CustomMatchPasswords, ['password'])
-  passwordconfirm: string;
   @IsString()
   name: string;
   @IsString()
@@ -41,7 +31,7 @@ export class AuthCredentialsDto {
   interests: [];
   @IsString()
   specialities: [];
-  @IsString()
+  @IsOptional()
   ProfilePicture: string;
   @IsString()
   Role: role;

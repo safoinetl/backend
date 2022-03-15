@@ -1,15 +1,14 @@
-import { Controller, UploadedFiles } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Post, Body, Request,Get } from '@nestjs/common';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { signInDto } from './dto/signin.Dto';
-import { UseInterceptors } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { Post, Body } from '@nestjs/common';
+import { AuthCredentialsDto } from '../dto/auth-credentials.dto';
+import { signInDto } from '../dto/signin.Dto';
 import { diskStorage } from 'multer';
-import { UploadedFile } from '@nestjs/common';
-import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { UserGuard } from './decorators/user-decorator';
+import { Res } from '@nestjs/common';
+import { Response } from 'express';
+import { map } from 'rxjs';
+import { pipe } from 'rxjs';
+
 export const storage = {
   storage: diskStorage({
     destination: './uploads',
@@ -20,12 +19,15 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
+  @HttpCode(201)
   signUp(
     @Body() authCredentialsDto: AuthCredentialsDto,
   ): Promise<{ accessToken: string }> {
-    return this.authService.signUp(authCredentialsDto);
+    return this.authService.signUp(authCredentialsDto)
   }
+
   @Post('/signin')
+  @HttpCode(200)
   signin(@Body() signInDto: signInDto): Promise<{ accessToken }> {
     return this.authService.signIn(signInDto);
   }

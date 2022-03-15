@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { role } from 'src/auth/enum/Role-Enum';
+import { role } from 'src/enum/Role-Enum';
 import { BeforeInsert } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
