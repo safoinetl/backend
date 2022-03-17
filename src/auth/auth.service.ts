@@ -56,14 +56,14 @@ export class AuthService {
     });
     const user = await this.UserModel.findOne({ email });
     if (user) {
-      throw new HttpException('user already exist', HttpStatus.BAD_REQUEST);
+      throw new ConflictException({ message: 'user already exist' });
+      // throw new HttpException('user already exist', HttpStatus.BAD_REQUEST);
     } else {
       await newUser.save();
       const payload: JwtPayload = { email };
       const accessToken = await this.jwtService.sign(payload);
       return { accessToken };
     }
-    // throw new InternalServerErrorException('something goes wrong');
   }
   async signIn(signinDto: signInDto): Promise<{ accessToken: string }> {
     const { email, password } = signinDto;
