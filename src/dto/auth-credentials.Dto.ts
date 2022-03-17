@@ -28,13 +28,13 @@ export class AuthCredentialsDto {
   @IsPhoneNumber()
   phone: number;
   @IsString()
-  interests: [];
+  interests?: [];
   @IsString()
-  specialities: [];
+  specialities?: [];
   @IsOptional()
   ProfilePicture: string;
   @IsString()
-  Role: role;
+  role: role;
   @IsOptional()
   Brand_Name?: string;
   @IsOptional()

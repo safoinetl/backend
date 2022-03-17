@@ -1,17 +1,29 @@
-import { Controller, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Req,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Post, Body } from '@nestjs/common';
 import { AuthCredentialsDto } from '../dto/auth-credentials.dto';
 import { signInDto } from '../dto/signin.Dto';
 import { diskStorage } from 'multer';
 import { Res } from '@nestjs/common';
-import { Response } from 'express';
-import { map } from 'rxjs';
-import { pipe } from 'rxjs';
+import { Response, Request } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { User } from 'src/schemas/user.schema';
 
 export const storage = {
   storage: diskStorage({
-    destination: './uploads',
+    destination: './uploads/profileimages',
+    filename: (req, file, cb) => {
+      const filename = file.originalname;
+      cb(null, `${filename}`);
+    },
   }),
 };
 @Controller('auth')
@@ -20,37 +32,39 @@ export class AuthController {
 
   @Post('/signup')
   @HttpCode(201)
-  signUp(
+  async signUp(
     @Body() authCredentialsDto: AuthCredentialsDto,
+    @Res() res,
   ): Promise<{ accessToken: string }> {
-    return this.authService.signUp(authCredentialsDto)
+    return await this.authService.signUp(authCredentialsDto);
+    // return await res.status(HttpStatus.CREATED).json({
+    //   response: user,
+    // });
   }
 
   @Post('/signin')
   @HttpCode(200)
-  signin(@Body() signInDto: signInDto): Promise<{ accessToken }> {
-    return this.authService.signIn(signInDto);
+  async signin(
+    @Body() signInDto: signInDto,
+    @Res() res,
+  ): Promise<{ accessToken: string }> {
+    return await this.authService.signIn(signInDto);
+    // return await res.status(HttpStatus.ACCEPTED).json({
+    //   response: user,
+    // });
   }
- 
-
+  @Post('/profilePic')
+  @UseGuards(UseGuards)
+  @UseInterceptors(FileInterceptor('file', storage))
+  uploadFile(@UploadedFile() file, @Req() req: Request): Promise<User> {
+    const user = req.user;
+    console.log (user)
+    return file.path;
+  }
   ////////////////////////////////////////////////////
   // return (
   //   this.authService
   //     // .updateOne(user.email, file)
   //     .pipe(map((user: User) => ({ profilePicture: user.profilePicture })))
   // );
-
-  // @Post('upload')
-  // @UseInterceptors(
-  //   FileInterceptor('file', {
-  //     storage: diskStorage({
-  //       destination: './src/uploads/profileimages',
-  //       filename: (req, file, cb) => {
-  //       },
-  //     }),
-  //   }),
-  // )
-  // uploadFile(@UploadedFile() file): Promise<Object> {
-  //   return file.path ;
-  // }
 }

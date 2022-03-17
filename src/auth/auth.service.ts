@@ -32,7 +32,7 @@ export class AuthService {
       phone,
       interests,
       specialities,
-      Role,
+      role,
       Brand_Name,
       M_F,
       short_bio,
@@ -48,7 +48,7 @@ export class AuthService {
       phone,
       interests,
       specialities,
-      Role,
+      role,
       Brand_Name,
       M_F,
       short_bio,
@@ -56,14 +56,14 @@ export class AuthService {
     });
     const user = await this.UserModel.findOne({ email });
     if (user) {
-      throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException('user already exist', HttpStatus.BAD_REQUEST);
     } else {
       await newUser.save();
       const payload: JwtPayload = { email };
       const accessToken = await this.jwtService.sign(payload);
-      return { accessToken }
+      return { accessToken };
     }
-    throw new InternalServerErrorException('something goes wrong');
+    // throw new InternalServerErrorException('something goes wrong');
   }
   async signIn(signinDto: signInDto): Promise<{ accessToken: string }> {
     const { email, password } = signinDto;
