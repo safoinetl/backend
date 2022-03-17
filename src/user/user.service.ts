@@ -25,6 +25,17 @@ export class UserService {
     delete getUser.password;
     return getUser;
   }
+  async profilePic(ProfilePicture: any, user_id: string): Promise<User> {
+    return this.UserModel.findByIdAndUpdate(
+      { user_id },
+      { ProfilePicture },
+      (err) => {
+        if (err) {
+          console.log(err);
+        }
+      },
+    );
+  }
   // async updateOne(user: any): Promise<User> {
   //   return await this.UserModel.findByIdAndUpdate(
   //     user.user_id,

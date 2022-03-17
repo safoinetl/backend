@@ -58,7 +58,7 @@ export class AuthController {
   @UseInterceptors(FileInterceptor('file', storage))
   uploadFile(@UploadedFile() file, @Req() req: Request): Promise<User> {
     const user = req.user;
-    console.log (user)
+    console.log (user);
     return file.path;
   }
   ////////////////////////////////////////////////////

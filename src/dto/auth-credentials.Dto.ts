@@ -27,9 +27,9 @@ export class AuthCredentialsDto {
   surname: string;
   @IsPhoneNumber()
   phone: number;
-  @IsString()
+  @IsOptional()
   interests?: [];
-  @IsString()
+  @IsOptional()
   specialities?: [];
   @IsOptional()
   ProfilePicture: string;

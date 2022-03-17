@@ -28,9 +28,9 @@ export class User {
   surname: string;
   @Prop({ required: true, unique: true })
   phone: number;
-  @Prop()
+  @Prop({ nullable: true })
   interests: [];
-  @Prop()
+  @Prop({ nullable: true })
   specialities: [];
   @BeforeInsert()
   emailToLowerCase() {
