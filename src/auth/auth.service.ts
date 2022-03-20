@@ -1,9 +1,6 @@
 import {
   ConflictException,
-  HttpException,
-  HttpStatus,
   Injectable,
-  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -62,16 +59,21 @@ export class AuthService {
       await newUser.save();
       const payload: JwtPayload = { email };
       const accessToken = await this.jwtService.sign(payload);
+      console.log(newUser.user_id);
       return { accessToken };
     }
   }
-  async signIn(signinDto: signInDto): Promise<{ accessToken: string }> {
+  async signIn(signinDto: signInDto) {
     const { email, password } = signinDto;
     const user = this.UserModel.findOne({ where: { email } });
     if (user && (await bcrypt.compare(password, (await user).password))) {
       const payload: JwtPayload = { email };
+      // delete (await user).password;
+      // delete (await user).user_id;
       const accessToken = await this.jwtService.sign(payload);
-      return { accessToken };
+      console.log(email);
+      const info = { accessToken };
+      return info;
     } else {
       throw new UnauthorizedException('please check your information');
     }

@@ -13,7 +13,7 @@ import { JwtStrategy } from 'src/Jwt/jwt-strategy';
     JwtModule.register({
       secret: 'pestore2022',
       signOptions: {
-        // expiresIn: false,
+        expiresIn: 3600,
       },
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),

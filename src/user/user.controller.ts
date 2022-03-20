@@ -31,30 +31,24 @@ export const storage = {
   }),
 };
 @Controller('user')
+@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(private userService: UserService) {}
-  // @Get('All')
-  // @UseGuards(UseGuards)
-  // GetAllProfiles(
-  //   @Query() GetProfileFilterDto: GetProfileFilterDto,
-  // ): Promise<User> {
-  //   return this.userService.getAllProfiles(GetProfileFilterDto);
-  // }
-  @Get('/:id')
-  @UseGuards(UseGuards)
-  findOne(@Param('id') user_id: string): Promise<User> {
-    return this.userService.findUserById(user_id);
-  }
 
-  // async addAvatar(@Req() request: Request, @UploadedFile() file: Express.Multer.File) {
-  //   return this.userService.addAvatar(request.user.user_id, {
-  //     path: file.path,
-  //     filename: file.originalname,
-  //     mimetype: file.mimetype
-  //   });
+  // @Get('/:id')
+  // @UseGuards(AuthGuard('jwt'))
+  // findOne(@Param('id') user_id: string): Promise<User> {
+  //   return this.userService.findUserById(user_id);
   // }
+
+  @Get('/user')
+  async findOne(@GetUser('user') user: User): Promise<User> {
+    delete user.password;
+    delete user.email;
+    console.log(`Hello ${user}`);
+    return user;
+  }
   @Post('/upload')
-  @UseGuards(AuthGuard())
   @UseInterceptors(FileInterceptor('ProfilePicture', storage))
   uploadProfilePic(@UploadedFile() file, @Request() req): Observable<any> {
     const user = req.user;

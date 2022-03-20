@@ -10,12 +10,12 @@ import { UserDocument, User } from 'src/schemas/user.schema';
 @Injectable()
 export class UserService {
   constructor(@InjectModel('User') private UserModel: Model<UserDocument>) {} // @InjectModel('User') private readonly userModel: Model<UserDocument>,
-  async getAllProfiles(
-    GetProfileFilterDto: GetProfileFilterDto,
-  ): Promise<User> {
-    const users = new this.UserModel();
-    return users;
-  }
+  // async getAllProfiles(
+  //   GetProfileFilterDto: GetProfileFilterDto,
+  // ): Promise<User> {
+  //   const users = new this.UserModel();
+  //   return users;
+  // }
 
   async findUserById(user_id: string): Promise<User> {
     const getUser = await this.UserModel.findOne({ where: { user_id } });
@@ -25,17 +25,17 @@ export class UserService {
     delete getUser.password;
     return getUser;
   }
-  async profilePic(ProfilePicture: any, user_id: string): Promise<User> {
-    return this.UserModel.findByIdAndUpdate(
-      { user_id },
-      { ProfilePicture },
-      (err) => {
-        if (err) {
-          console.log(err);
-        }
-      },
-    );
-  }
+  // async profilePic(ProfilePicture: any, user_id: string): Promise<User> {
+  //   return this.UserModel.findByIdAndUpdate(
+  //     { user_id },
+  //     { ProfilePicture },
+  //     (err) => {
+  //       if (err) {
+  //         console.log(err);
+  //       }
+  //     },
+  //   );
+  // }
   // async updateOne(user: any): Promise<User> {
   //   return await this.UserModel.findByIdAndUpdate(
   //     user.user_id,
@@ -55,20 +55,3 @@ export class UserService {
     );
   }
 }
-//   const query = this.createQueryBuilder('User');
-//   if (search) {
-//     query.andWhere(
-//        'LOWER(user.name) LIKE LOWER(:search) OR LOWER(user.surname) LIKE LOWER(:search)' ,
-//       // for the sensitive input and just keep the parenthese cuzz it make a mistake when we do fetch tasks for users
-//       {
-//         search: `%${search}%`,
-//       } /*% let us to make the search caracter par caracter thats mean no need to entre the whole word to search for it */,
-//     );
-//   }
-//   try {
-//     const user = await query.getMany();
-//     return user;
-//   } catch (error) {
-//   throw new error();
-//   }
-// }

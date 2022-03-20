@@ -16,6 +16,7 @@ import { Res } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { User } from 'src/schemas/user.schema';
+import { AuthGuard } from '@nestjs/passport';
 
 export const storage = {
   storage: diskStorage({
@@ -34,7 +35,7 @@ export class AuthController {
   @HttpCode(201)
   async signUp(
     @Body() authCredentialsDto: AuthCredentialsDto,
-    @Res() res,
+    //@Res() res,
   ): Promise<{ accessToken: string }> {
     return await this.authService.signUp(authCredentialsDto);
     // return await res.status(HttpStatus.CREATED).json({
@@ -44,21 +45,18 @@ export class AuthController {
 
   @Post('/signin')
   @HttpCode(200)
-  async signin(
-    @Body() signInDto: signInDto,
-    @Res() res,
-  ): Promise<{ accessToken: string }> {
+  async signin(@Body() signInDto: signInDto) {
     return await this.authService.signIn(signInDto);
     // return await res.status(HttpStatus.ACCEPTED).json({
     //   response: user,
     // });
   }
   @Post('/profilePic')
-  @UseGuards(UseGuards)
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('file', storage))
   uploadFile(@UploadedFile() file, @Req() req: Request): Promise<User> {
     const user = req.user;
-    console.log (user);
+    console.log(user);
     return file.path;
   }
   ////////////////////////////////////////////////////
