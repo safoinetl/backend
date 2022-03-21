@@ -1,7 +1,9 @@
 import {
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
   Req,
   UploadedFile,
   UseGuards,
@@ -17,16 +19,17 @@ import { Response, Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { User } from 'src/schemas/user.schema';
 import { AuthGuard } from '@nestjs/passport';
-
-export const storage = {
-  storage: diskStorage({
-    destination: './uploads/profileimages',
-    filename: (req, file, cb) => {
-      const filename = file.originalname;
-      cb(null, `${filename}`);
-    },
-  }),
-};
+import fs = require('fs');
+import { v4 as uuid } from 'uuid';
+// export const storage = {
+//   storage: diskStorage({
+//     destination: './uploads/profileimages',
+//     filename: (req, file, cb) => {
+//       const filename = file.originalname;
+//       cb(null, `${filename}`);
+//     },
+//   }),
+// };
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -51,18 +54,44 @@ export class AuthController {
     //   response: user,
     // });
   }
-  @Post('/profilePic')
-  @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(FileInterceptor('file', storage))
-  uploadFile(@UploadedFile() file, @Req() req: Request): Promise<User> {
-    const user = req.user;
-    console.log(user);
+
+  @Post('/uploadImg')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        filename: (Req, file, callback) => {
+          callback(null, file.originalname);
+        },
+        destination: (req, file, callback) => {
+          const newpath = uuid();
+          console.log(newpath);
+          const path = `./uploads//${newpath}`;
+          fs.mkdirSync(path);
+          callback(null, path);
+        },
+      }),
+    }),
+  )
+  uploadFile(@UploadedFile() file) {
     return file.path;
   }
-  ////////////////////////////////////////////////////
-  // return (
-  //   this.authService
-  //     // .updateOne(user.email, file)
-  //     .pipe(map((user: User) => ({ profilePicture: user.profilePicture })))
-  // );
+  @Get('/image/:imgpath')
+  seeUpoaderFile(@Param('imgpath') image, @Res() res) {
+    return res.sendFile(image, { root: 'uploads' });
+  }
 }
+
+// @Post('/profilePic')
+// @UseGuards(AuthGuard('jwt'))
+// @UseInterceptors(FileInterceptor('file', storage))
+// uploadFile(@UploadedFile() file, @Req() req: Request): Promise<User> {
+//   const user = req.user;
+//   console.log(user);
+//   return file.path;
+// }
+////////////////////////////////////////////////////
+// return (
+//   this.authService
+//     // .updateOne(user.email, file)
+//     .pipe(map((user: User) => ({ profilePicture: user.profilePicture })))
+// );

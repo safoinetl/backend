@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { address, education, links, professional } from 'src/dto/fields/fields';
+import { gender } from 'src/enum/gender-enum';
 import { role } from 'src/enum/Role-Enum';
 import { BeforeInsert } from 'typeorm';
 import { v4 as uuid } from 'uuid';
@@ -48,5 +50,21 @@ export class User {
   short_bio: string;
   @Prop()
   long_bio: string;
+  @Prop()
+  education: education;
+  @Prop()
+  professional: professional;
+  @Prop({ unique: true })
+  pseudo: string;
+  @Prop()
+  status: string;
+  @Prop()
+  birthDate: Date;
+  @Prop({ type: String, enum: gender })
+  gender: gender;
+  @Prop()
+  address: address;
+  @Prop()
+  links: links;
 }
 export const UserSchema = SchemaFactory.createForClass(User);
