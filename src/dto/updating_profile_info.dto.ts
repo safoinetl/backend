@@ -3,28 +3,28 @@ import { gender } from 'src/enum/gender-enum';
 import { role } from 'src/enum/Role-Enum';
 import { address, education, links, professional } from './fields/fields';
 
-export class UpdateProfileDto {//diviser le car ya des blocks 
-  // @IsOptional()
-  // education: education;
-  // @IsOptional()
-  // professional: professional;
+export class UpdateProfileDto {
   @IsOptional()
-  pseudo: string;
-  // @IsOptional()
-  // status: string;
+  pseudo?: string;
   @IsOptional()
   birthDate: Date;
   @IsOptional()
   gender: gender;
   @IsOptional()
+  name: string;
+  @IsOptional()
+  surname: string;
+  @IsOptional()
+  education: education;
+  @IsOptional()
+  professional: professional;
+  @IsOptional()
+  status: string;
+  @IsOptional()
   address: address;
   @IsOptional()
   links: links;
-  @IsString()
-  name: string;
-  @IsString()
-  surname: string;
-  @IsPhoneNumber()
+  @IsOptional()
   phone: number;
   @IsOptional()
   interests?: [];
@@ -32,10 +32,10 @@ export class UpdateProfileDto {//diviser le car ya des blocks
   specialities?: [];
   @IsOptional()
   ProfilePicture: string;
-  @IsString()
-  role: role;
   @IsOptional()
   short_bio?: string;
   @IsOptional()
   long_bio?: string;
+  @IsOptional()
+  email: string;
 }

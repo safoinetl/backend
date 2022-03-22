@@ -19,17 +19,8 @@ import { Response, Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { User } from 'src/schemas/user.schema';
 import { AuthGuard } from '@nestjs/passport';
-import fs = require('fs');
 import { v4 as uuid } from 'uuid';
-// export const storage = {
-//   storage: diskStorage({
-//     destination: './uploads/profileimages',
-//     filename: (req, file, cb) => {
-//       const filename = file.originalname;
-//       cb(null, `${filename}`);
-//     },
-//   }),
-// };
+import * as fs from 'fs';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -48,7 +39,7 @@ export class AuthController {
 
   @Post('/signin')
   @HttpCode(200)
-  async signin(@Body() signInDto: signInDto) {
+  async signin(@Body() signInDto: signInDto): Promise<{ accessToken: string }> {
     return await this.authService.signIn(signInDto);
     // return await res.status(HttpStatus.ACCEPTED).json({
     //   response: user,
@@ -72,8 +63,12 @@ export class AuthController {
       }),
     }),
   )
-  uploadFile(@UploadedFile() file) {
-    return file.path;
+  uploadFile(@UploadedFile() file, @Res() res) {
+    // return
+    const image = file.path;
+    return res.status(HttpStatus.CREATED).json({
+      response: image,
+    });
   }
   @Get('/image/:imgpath')
   seeUpoaderFile(@Param('imgpath') image, @Res() res) {

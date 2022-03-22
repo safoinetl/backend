@@ -3,13 +3,14 @@ import { Document } from 'mongoose';
 import { address, education, links, professional } from 'src/dto/fields/fields';
 import { gender } from 'src/enum/gender-enum';
 import { role } from 'src/enum/Role-Enum';
-import { BeforeInsert } from 'typeorm';
+
 import { v4 as uuid } from 'uuid';
 
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
+
   @Prop({
     type: String,
     default: function genUUID() {
@@ -34,10 +35,6 @@ export class User {
   interests: [];
   @Prop({ nullable: true })
   specialities: [];
-  @BeforeInsert()
-  emailToLowerCase() {
-    this.email = this.email.toLowerCase();
-  }
   @Prop({ nullable: true })
   ProfilePicture: string;
   @Prop({ type: String, enum: role, default: 'user' })
@@ -54,7 +51,7 @@ export class User {
   education: education;
   @Prop()
   professional: professional;
-  @Prop({ unique: true })
+  @Prop()
   pseudo: string;
   @Prop()
   status: string;

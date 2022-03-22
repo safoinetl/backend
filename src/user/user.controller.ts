@@ -19,10 +19,6 @@ import path from 'path';
 import { diskStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { AuthCredentialsDto } from 'src/dto/auth-credentials.dto';
-import { Query } from '@nestjs/common';
-import { GetProfileFilterDto } from 'src/dto/getProfileFilter.dto';
-import { map, Observable } from 'rxjs';
 import { UpdateProfileDto } from 'src/dto/updating_profile_info.dto';
 export const storage = {
   storage: diskStorage({
@@ -36,7 +32,7 @@ export const storage = {
 @Controller('user')
 @UseGuards(AuthGuard('jwt'))
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   // @Get('/:id')
   // @UseGuards(AuthGuard('jwt'))
@@ -47,16 +43,14 @@ export class UserController {
 
 
 
-  @Put('/edit')
-  @UseGuards(AuthGuard('jwt'))
-  update(
+  @Put('/editProfile')
+  updateProfile(
     @GetUser('user') { user_id }: User,
     @Body(new ValidationPipe({ transform: true, whitelist: true }))
     data: UpdateProfileDto,
   ) {
-    return this.userService.updateUser(user_id, data);
+    return this.userService.updateProfile(user_id, data);
   }
-
   @Get('/user')
   async findOne(@GetUser('user') user: User): Promise<User> {
     delete user.password;
@@ -74,5 +68,5 @@ export class UserController {
   //     .updateOne(user.user_id, file.path)
   //     .pipe(map(user.profilePicture));
   // }
-  
+
 }

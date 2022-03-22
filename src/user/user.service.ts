@@ -21,7 +21,7 @@ export class UserService {
     return this.UserModel.findOne({ where: { user_id } });
   }
 
-  async updateUser(user_id: string, data: UpdateProfileDto) {
+  async updateProfile(user_id: string, data: UpdateProfileDto) {
     await this.UserModel.updateOne({ user_id }, data);
     return this.findUserById(user_id);
   }

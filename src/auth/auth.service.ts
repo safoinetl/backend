@@ -58,24 +58,22 @@ export class AuthService {
     } else {
       await newUser.save();
       const payload: JwtPayload = { email };
-      const accessToken = await this.jwtService.sign(payload);
+      const accessToken = this.jwtService.sign(payload);
       console.log(newUser.user_id);
       return { accessToken };
     }
   }
-  async signIn(signinDto: signInDto) {
+  async signIn(signinDto: signInDto): Promise<{ accessToken: string }> {
     const { email, password } = signinDto;
-    const user = this.UserModel.findOne({ where: { email } });
-    if (user && (await bcrypt.compare(password, (await user).password))) {
+    const user = await this.UserModel.findOne({ where: { email } });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      /* it will do a comparation between your input and the base de donnees if its true it will return a succed message else it throw an error */
       const payload: JwtPayload = { email };
-      // delete (await user).password;
-      // delete (await user).user_id;
-      const accessToken = await this.jwtService.sign(payload);
-      console.log(email);
-      const info = { accessToken };
-      return info;
-    } else {
-      throw new UnauthorizedException('please check your information');
+      const accessToken = this.jwtService.sign(payload);
+      return { accessToken };
     }
+    throw new UnauthorizedException({
+      message: 'please check your information',
+    });
   }
 }

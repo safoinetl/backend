@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 import { JwtPayload } from './jwt-payload';
 import { User, UserDocument } from 'src/schemas/user.schema';
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     @InjectModel('User')
     private userModel: Model<UserDocument>,
@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const { email } = payload;
     const user: User = await this.userModel.findOne({ email });
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('login in first');
     }
     return user;
   }
