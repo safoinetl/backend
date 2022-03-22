@@ -7,6 +7,7 @@ import { switchMap, from, Observable } from 'rxjs';
 import { AuthCredentialsDto } from 'src/dto/auth-credentials.dto';
 import { GetProfileFilterDto } from 'src/dto/getProfileFilter.dto';
 import { UpdateProfileDto } from 'src/dto/updating_profile_info.dto';
+import { category } from 'src/enum/category-enum';
 import { UserDocument, User } from 'src/schemas/user.schema';
 @Injectable()
 export class UserService {
@@ -25,7 +26,10 @@ export class UserService {
     await this.UserModel.updateOne({ user_id }, data);
     return this.findUserById(user_id);
   }
-
+  
+    // const words = {category: [category]}
+    // return words;
+  }
 
   // async findUserById(user_id: string): Promise<User> {
   //   const getUser = await this.UserModel.findOne({ where: { user_id } });
@@ -55,13 +59,13 @@ export class UserService {
   //     },
   //   );
   // }
-//  updateOne(user_id: string, user: User): Observable<any> {
-//     delete user.email;
-//     delete user.password;
-//     delete user.role;
+  //  updateOne(user_id: string, user: User): Observable<any> {
+  //     delete user.email;
+  //     delete user.password;
+  //     delete user.role;
 
-//     return from(this.UserModel.update(user)).pipe(
-//       switchMap(() => this.findUserById(user_id)),
-//     );
-//   }
-}
+  //     return from(this.UserModel.update(user)).pipe(
+  //       switchMap(() => this.findUserById(user_id)),
+  //     );
+  //   }
+

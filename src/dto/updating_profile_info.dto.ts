@@ -1,4 +1,5 @@
 import { IsEmail, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import { category } from 'src/enum/category-enum';
 import { gender } from 'src/enum/gender-enum';
 import { role } from 'src/enum/Role-Enum';
 import { address, education, links, professional } from './fields/fields';
@@ -27,9 +28,9 @@ export class UpdateProfileDto {
   @IsOptional()
   phone: number;
   @IsOptional()
-  interests?: [];
+  interests?: [category];
   @IsOptional()
-  specialities?: [];
+  specialities?: [category];
   @IsOptional()
   ProfilePicture: string;
   @IsOptional()

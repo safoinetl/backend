@@ -21,6 +21,7 @@ import { User } from 'src/schemas/user.schema';
 import { AuthGuard } from '@nestjs/passport';
 import { v4 as uuid } from 'uuid';
 import * as fs from 'fs';
+import { category } from 'src/enum/category-enum';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -71,10 +72,15 @@ export class AuthController {
     });
   }
   @Get('/image/:imgpath')
-  seeUpoaderFile(@Param('imgpath') image, @Res() res) {
+  seeUpoaderFile( @Param('imgpath') image, @Res() res) {
     return res.sendFile(image, { root: 'uploads' });
   }
+  @Get('/intndspc')
+  getCategory(){
+    return this.authService.getCategory();
+  }
 }
+
 
 // @Post('/profilePic')
 // @UseGuards(AuthGuard('jwt'))

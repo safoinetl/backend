@@ -20,6 +20,7 @@ import { diskStorage } from 'multer';
 import { v4 as uuid } from 'uuid';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateProfileDto } from 'src/dto/updating_profile_info.dto';
+import { category } from 'src/enum/category-enum';
 export const storage = {
   storage: diskStorage({
     destination: './uploads/profileimages',
@@ -58,6 +59,7 @@ export class UserController {
     console.log(`Hello ${user}`);
     return user;
   }
+ 
   // @Post('/upload')
   // @UseInterceptors(FileInterceptor('ProfilePicture', storage))
   // uploadProfilePic(@UploadedFile() file, @Request() req): Observable<any> {
