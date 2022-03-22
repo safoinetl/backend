@@ -20,7 +20,7 @@ export class AuthService {
   ) {}
   async signUp(
     authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{ created: string }> {
     const {
       email,
       password,
@@ -57,10 +57,9 @@ export class AuthService {
       // throw new HttpException('user already exist', HttpStatus.BAD_REQUEST);
     } else {
       await newUser.save();
-      const payload: JwtPayload = { email };
-      const accessToken = this.jwtService.sign(payload);
       console.log(newUser.user_id);
-      return { accessToken };
+      const created = 'succed';
+      return { created };
     }
   }
   async signIn(signinDto: signInDto): Promise<{ accessToken: string }> {

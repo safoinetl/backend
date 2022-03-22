@@ -30,7 +30,7 @@ export const storage = {
   }),
 };
 @Controller('user')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard())
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

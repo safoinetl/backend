@@ -18,5 +18,6 @@ import { UserModule } from 'src/user/user.module';
   ],
   controllers: [DealController],
   providers: [DealService],
+  exports: [],
 })
 export class DealModule {}

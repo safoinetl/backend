@@ -36,10 +36,10 @@ export const storage = {
   }),
 };
 @Controller('deal')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard())
 export class DealController {
   constructor(private readonly dealService: DealService) {}
-  
+
   @Post('/createDeal')
   createDeal(@Body() createDealDto: CreateDealDto) {
     return this.dealService.createDeal(createDealDto);

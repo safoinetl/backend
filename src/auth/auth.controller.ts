@@ -30,7 +30,7 @@ export class AuthController {
   async signUp(
     @Body() authCredentialsDto: AuthCredentialsDto,
     //@Res() res,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{ created: string }> {
     return await this.authService.signUp(authCredentialsDto);
     // return await res.status(HttpStatus.CREATED).json({
     //   response: user,

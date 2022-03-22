@@ -6,6 +6,8 @@ import { User, UserSchema } from 'src/schemas/user.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from 'src/Jwt/jwt-strategy';
+import { UserModule } from 'src/user/user.module';
+import { DealModule } from 'src/deal/deal.module';
 
 @Module({
   imports: [
@@ -13,7 +15,7 @@ import { JwtStrategy } from 'src/Jwt/jwt-strategy';
     JwtModule.register({
       secret: 'pestore2022',
       signOptions: {
-        expiresIn: 10000,
+        expiresIn: '10000s',
       },
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
