@@ -22,9 +22,9 @@ export class AuthCredentialsDto {
   //   message: 'password is weak',
   // })
   password: string;
-  @IsString()
+  @IsOptional()
   name: string;
-  @IsString()
+  @IsOptional()
   surname: string;
   @IsString()
   phone: string;
