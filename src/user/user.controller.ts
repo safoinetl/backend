@@ -31,7 +31,7 @@ export const storage = {
   }),
 };
 @Controller('user')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -41,25 +41,24 @@ export class UserController {
   //   return this.userService.findUserById(user_id);
   // }
 
-
-
-
+  /////////////////////////////////////////////////////////////
   @Put('/editProfile')
   updateProfile(
-    @GetUser('user') { user_id }: User,
+    @GetUser('user') userId : User,
     @Body(new ValidationPipe({ transform: true, whitelist: true }))
     data: UpdateProfileDto,
   ) {
-    return this.userService.updateProfile(user_id, data);
+    return this.userService.updateProfile(JSON.stringify(userId), data);
   }
+
   @Get('/user')
   async findOne(@GetUser('user') user: User): Promise<User> {
-    delete user.password;
+    const info = delete user.password;
     delete user.email;
-    console.log(`Hello ${user}`);
+    console.log(`Hello ${info}`);
     return user;
   }
- 
+
   // @Post('/upload')
   // @UseInterceptors(FileInterceptor('ProfilePicture', storage))
   // uploadProfilePic(@UploadedFile() file, @Request() req): Observable<any> {
@@ -70,5 +69,4 @@ export class UserController {
   //     .updateOne(user.user_id, file.path)
   //     .pipe(map(user.profilePicture));
   // }
-
 }

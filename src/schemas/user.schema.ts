@@ -1,24 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 import { Document } from 'mongoose';
 import { address, education, links, professional } from 'src/dto/fields/fields';
 import { gender } from 'src/enum/gender-enum';
 import { role } from 'src/enum/Role-Enum';
 
 import { v4 as uuid } from 'uuid';
+import { Deal } from './deal.schema';
 
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-
-  @Prop({
-    type: String,
-    default: function genUUID() {
-      return uuid();
-    },
-  })
-  user_id: string;
-
+  // @Prop({
+  //   type: String,
+  //   default: function genUUID() {
+  //     return uuid();
+  //   },
+  // })
+  // user_id2: string;
+  // @Prop()
+  // user_id: mongoose.Schema.Types.ObjectId;
   @Prop({ required: true, unique: true })
   email: string;
 
@@ -63,5 +65,7 @@ export class User {
   address: address;
   @Prop()
   links: links;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => Deal })
+  deal: Deal[];
 }
 export const UserSchema = SchemaFactory.createForClass(User);

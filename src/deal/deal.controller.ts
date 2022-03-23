@@ -20,6 +20,8 @@ import * as fs from 'fs';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Put } from '@nestjs/common';
+import { GetUser } from 'src/decorators/user-decorator';
+import { User } from 'src/schemas/user.schema';
 
 export const storage = {
   storage: diskStorage({
@@ -36,12 +38,12 @@ export const storage = {
   }),
 };
 @Controller('deal')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 export class DealController {
   constructor(private readonly dealService: DealService) {}
 
   @Post('/createDeal')
-  createDeal(@Body() createDealDto: CreateDealDto) {
+  createDeal(@Body() createDealDto: CreateDealDto, @GetUser() user: User) {
     return this.dealService.createDeal(createDealDto);
   }
   @Post('/uploadDealImg')

@@ -15,4 +15,6 @@ export class CreateDealDto {
   category: [category];
   @IsString()
   deal_type: dealType;
+  @IsOptional()
+  userId: string;
 }

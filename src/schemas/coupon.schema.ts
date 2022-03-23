@@ -2,11 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { category } from 'src/enum/category-enum';
 import { dealType } from 'src/enum/deals-type-enum';
-import { v4 as uuid } from 'uuid';
 import { User } from './user.schema';
-export type DealDocument = Deal & Document;
+
+export type CouponDocument = Coupon & Document;
 @Schema()
-export class Deal {
+export class Coupon {
   // @Prop({
   //   type: String,
   //   default: function genUUID() {
@@ -15,11 +15,13 @@ export class Deal {
   // })
   // deal_id: string;
   @Prop()
-  deal_id: mongoose.Schema.Types.ObjectId;
+  coupon_id: mongoose.Schema.Types.ObjectId;
   @Prop()
-  deal_name: string;
+  coupon_name: string;
   @Prop()
-  price: string;
+  old_price: string;
+  @Prop()
+  new_price: string;
   @Prop()
   description: string;
   @Prop()
@@ -27,10 +29,14 @@ export class Deal {
   @Prop()
   category: [category];
   @Prop()
-  deal_type: dealType;
+  coupon_type: dealType;
   @Prop()
-  date: Date;
+  date_validation: Date;
+  @Prop()
+  created_date: Date;
+  @Prop()
+  reduc_esti: string;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => User })
   user: User;
 }
-export const DealSchema = SchemaFactory.createForClass(Deal);
+export const CouponSchema = SchemaFactory.createForClass(Coupon);
