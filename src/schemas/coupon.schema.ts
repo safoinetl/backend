@@ -7,15 +7,6 @@ import { User } from './user.schema';
 export type CouponDocument = Coupon & Document;
 @Schema()
 export class Coupon {
-  // @Prop({
-  //   type: String,
-  //   default: function genUUID() {
-  //     return uuid();
-  //   },
-  // })
-  // deal_id: string;
-  @Prop()
-  coupon_id: mongoose.Schema.Types.ObjectId;
   @Prop()
   coupon_name: string;
   @Prop()

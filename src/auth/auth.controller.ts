@@ -27,7 +27,6 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  @HttpCode(201)
   async signUp(
     @Body() authCredentialsDto: AuthCredentialsDto,
     //@Res() res,
@@ -39,7 +38,6 @@ export class AuthController {
   }
 
   @Post('/signin')
-  @HttpCode(200)
   async signin(@Body() signInDto: signInDto): Promise<{ accessToken: string }> {
     return await this.authService.signIn(signInDto);
     // return await res.status(HttpStatus.ACCEPTED).json({

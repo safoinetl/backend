@@ -36,7 +36,7 @@ export class AuthService {
       M_F,
       short_bio,
       long_bio,
-      ProfilePicture
+      ProfilePicture,
     } = authCredentialsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -68,19 +68,21 @@ export class AuthService {
   }
   async signIn(signinDto: signInDto): Promise<{ accessToken: string }> {
     const { email, password } = signinDto;
-    const user = await this.UserModel.findOne({ where: { email } });
-    if (user && (await bcrypt.compare(password, user.password))) {
+    const users = await this.UserModel.findOne({ email: email });
+    //const passValidate = bcrypt.compare(password, users.password);
+    const passValidate = await bcrypt.compare(password, users.password);
+    if (users && passValidate) {
       /* it will do a comparation between your input and the base de donnees if its true it will return a succed message else it throw an error */
-      const payload: JwtPayload = {
-        email,
-      };
+      const payload: JwtPayload = { email };
       const accessToken = this.jwtService.sign(payload);
       return { accessToken };
+    } else {
+      throw new UnauthorizedException({
+        message: 'please check your information',
+      });
     }
-    throw new UnauthorizedException({
-      message: 'please check your information',
-    });
   }
+
   async getCategory() {
     return {
       ADVICE: 'Advice',
