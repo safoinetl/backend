@@ -53,7 +53,7 @@ export class UserController {
 
   @Get('/user')
   async findOne(@GetUser('user') user: User): Promise<User> {
-    return user;
+    return this.userService.findOne(user);
   }
 
   // @Post('/upload')

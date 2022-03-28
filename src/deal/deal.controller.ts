@@ -46,9 +46,10 @@ export class DealController {
   @Post('/createDeal')
   createDeal(
     @Body() createDealDto: CreateDealDto,
-    // @GetUser() userId: string,
+    @GetUser('user') user_id: string,
   ) {
-    return this.dealService.createDeal(createDealDto);
+    console.log(user_id);
+    return this.dealService.createDeal(createDealDto, user_id);
   }
   @Post('/uploadDealImg')
   @UseInterceptors(FileInterceptor('dealPic', storage))
