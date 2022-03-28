@@ -20,9 +20,9 @@ export class DealService {
       deal_picture,
       category,
       deal_type,
-      userId,
+      user_id,
     } = createDealDto;
-    const user = await this.UserModel.findOne({ userId }).exec();
+    const user = await this.UserModel.findOne({ user_id: user_id }).exec();
     const newDeal = new this.DealModel({
       deal_name,
       price,
@@ -35,14 +35,29 @@ export class DealService {
     console.log(user);
     try {
       await newDeal.save();
-      await this.UserModel.findByIdAndUpdate(userId, {
+      await this.UserModel.findByIdAndUpdate(user.user_id, {
         $push: { deal: newDeal },
-      }) .exec();
+      }).exec();
       return newDeal;
     } catch (error) {
       throw new InternalServerErrorException('check your details');
     }
   }
+  // async addNotif(addNotificationDto: AddNotificationDto): Promise<void> {
+  //   const { message , person_id} = addNotificationDto;
+  //   const person = await this.personModel.findById(person_id).exec();
+  //   console.log(person) ;
+  //   const newNotif = new this.notifficationModel({
+  //       message,
+  //       person
+  //   });
+  //  const result = await newNotif.save();
+  //  await this.personModel
+  //     .findByIdAndUpdate(person_id, {
+  //       $push: { notif: newNotif },
+  //     })
+  //     .exec();
+  // }
 
   findAll() {
     return this.DealModel.find();

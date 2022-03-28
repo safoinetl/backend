@@ -12,10 +12,10 @@ import { AuthModule } from 'src/auth/auth.module';
   imports: [
     AuthModule,
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
-    PassportModule,
+     PassportModule,
   ],
   providers: [UserService, JwtStrategy],
   controllers: [UserController],
-  exports: [PassportModule, JwtStrategy],
+  // exports: [PassportModule, JwtStrategy],
 })
 export class UserModule {}

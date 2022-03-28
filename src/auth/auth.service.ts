@@ -63,25 +63,27 @@ export class AuthService {
       await newUser.save();
       console.log(newUser);
       const created = 'succed';
-      return { created };
+      return { created: created };
     }
   }
-  async signIn(signinDto: signInDto): Promise<{ accessToken: string }> {
+  async signIn(signinDto: signInDto) {
     const { email, password } = signinDto;
     const users = await this.UserModel.findOne({ email: email });
     //const passValidate = bcrypt.compare(password, users.password);
     const passValidate = await bcrypt.compare(password, users.password);
     if (users && passValidate) {
       /* it will do a comparation between your input and the base de donnees if its true it will return a succed message else it throw an error */
-      const payload: JwtPayload = { email };
+      const user = await this.UserModel.findOne({ email: email });
+      const payload: JwtPayload = { email: user.email };
       const accessToken = this.jwtService.sign(payload);
-      return { accessToken };
+      return { accessToken, users };
     } else {
       throw new UnauthorizedException({
         message: 'please check your information',
       });
     }
   }
+  
 
   async getCategory() {
     return {
@@ -113,11 +115,11 @@ export class AuthService {
       JOB: 'Job',
     };
   }
-  async getRefreshToken(): Promise<string> {
-    const userDataToUpdate = {
-      refreshToken: randomToken.generate(16),
-      refreshTokenExp: moment().day(4).format('YYYY/MM/DD'),
-    };
-    return userDataToUpdate.refreshToken;
-  }
+  // async getRefreshToken(): Promise<string> {
+  //   const userDataToUpdate = {
+  //     refreshToken: randomToken.generate(16),
+  //     refreshTokenExp: moment().day(4).format('YYYY/MM/DD'),
+  //   };
+  //   return userDataToUpdate.refreshToken;
+  // }
 }

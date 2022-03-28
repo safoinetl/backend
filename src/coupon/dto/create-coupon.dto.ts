@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsDate, IsOptional, IsString } from 'class-validator';
 import { category } from 'src/enum/category-enum';
 import { dealType } from 'src/enum/deals-type-enum';
 
@@ -17,10 +17,12 @@ export class CreateCouponDto {
   category: [category];
   @IsString()
   coupon_type: dealType;
-  @IsString()
+  @IsDate()
   date_validation: Date;
-  @IsString()
+  @IsDate()
   created_date: Date;
   @IsString()
   reduc_esti: string;
+  @IsOptional()
+  userId: string;
 }

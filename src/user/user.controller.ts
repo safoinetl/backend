@@ -44,18 +44,15 @@ export class UserController {
   /////////////////////////////////////////////////////////////
   @Put('/editProfile')
   updateProfile(
-    @GetUser('user') userId : User,
-    @Body(new ValidationPipe({ transform: true, whitelist: true }))
+    @GetUser('user') user_id: string,
+    @Body()
     data: UpdateProfileDto,
   ) {
-    return this.userService.updateProfile(JSON.stringify(userId), data);
+    return this.userService.updateProfile(data, user_id);
   }
 
   @Get('/user')
   async findOne(@GetUser('user') user: User): Promise<User> {
-    const info = delete user.password;
-    delete user.email;
-    console.log(`Hello ${info}`);
     return user;
   }
 

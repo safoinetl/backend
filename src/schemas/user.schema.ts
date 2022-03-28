@@ -6,6 +6,7 @@ import { gender } from 'src/enum/gender-enum';
 import { role } from 'src/enum/Role-Enum';
 
 import { v4 as uuid } from 'uuid';
+import { Coupon } from './coupon.schema';
 import { Deal } from './deal.schema';
 
 export type UserDocument = User & Document;
@@ -18,9 +19,9 @@ export class User {
   //     return uuid();
   //   },
   // })
-  // user_id2: string;
-  // @Prop()
-  // user_id: mongoose.Schema.Types.ObjectId;
+  // user_id: string;
+  @Prop()
+  user_id: mongoose.Schema.Types.ObjectId;
   @Prop({ required: true, unique: true })
   email: string;
 
@@ -67,5 +68,8 @@ export class User {
   links: links;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => Deal })
   deal: Deal[];
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => Coupon })
+  coupon: Coupon[];
+  static user_id: any;
 }
 export const UserSchema = SchemaFactory.createForClass(User);

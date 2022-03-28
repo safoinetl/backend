@@ -1,4 +1,4 @@
-export class dealType {
-  PRODUCT = 'product';
-  SERVICE = 'service';
+export enum dealType {
+  PRODUCT = 'product',
+  SERVICE = 'service',
 }

@@ -69,16 +69,12 @@ export class AuthController {
       response: image,
     });
   }
-  @Get('/image/:imgpath')
-  seeUpoaderFile( @Param('imgpath') image, @Res() res) {
-    return res.sendFile(image, { root: 'uploads' });
-  }
+
   // @Get('/intndspc')
   // getCategory(){
   //   return this.authService.getCategory();
   // }
- } 
-
+}
 
 // @Post('/profilePic')
 // @UseGuards(AuthGuard('jwt'))

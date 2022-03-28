@@ -16,7 +16,7 @@ import { UserSchema } from 'src/schemas/user.schema';
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     PassportModule,
     UserModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    // PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [DealController],
   providers: [DealService],

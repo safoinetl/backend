@@ -20,61 +20,51 @@ export class UserService {
   //   const users = new this.UserModel();
   //   return users;
   // }
-  async findUserById(userId: string): Promise<User> {
-    return this.UserModel.findOne({ where: { userId } });
-  }
+
+  // async findUserById(userId: string): Promise<User> {
+  //   return this.UserModel.findOne({ userId: userId });
+
   // { user_id },
-  async updateProfile(userId: string, data: UpdateProfileDto) {
-    //const query: any = { user: new mongoose.Types.ObjectId(user_id) };
-    const user = await this.UserModel.updateOne({ userId }, data);
-    // findByIdAndUpdate(
-    //   // JSON.stringify(user_id),
-    //   { query },
-    //   data,
-    // );
-    await this.findUserById(userId);
-    console.log(user);
-    return user;
+  // async updateProfile(data: UpdateProfileDto, user_id: string): Promise<User> {
+  //   if (!mongoose.Types.ObjectId.isValid(user_id)) {
+  //     throw new Error();
+  //   }
+  //   const change = await this.UserModel.findOneAndUpdate(
+  //     { user_id: user_id },
+  //     data,
+  //     {
+  //       new: true,
+  //     },
+  //     // { $set: { data: data } },
+  //   );
+  //   try {
+  //     const resultat = await this.UserModel.findOne({ user_id: user_id });
+  //     return resultat;
+  //   } catch (error) {
+  //     throw new InternalServerErrorException('check your details');
+  //   }
+
+  async updateProfile(data: UpdateProfileDto, user_id: string) {
+    const update = await this.UserModel.findByIdAndUpdate(user_id, data);
+
+    if (!update) {
+      throw new NotFoundException();
+    }
+    return update;
   }
 
-  // const words = {category: [category]}
-  // return words;
+  // updateOne(
+  //   { userId },
+  //   {  data },
+  //   // { upsert: true },
+  // );
+  // const user = await this.UserModel.updateOne({ user_id }, data);
+  // console.log(user);
+  // const current = await this.findUserById(user_id);
+  // return current;
+  findOne(user: User) {
+    // const resultat = this.UserModel.find();
+    // return resultat;
+    return this.UserModel.findOne(user);
+  }
 }
-
-// async findUserById(user_id: string): Promise<User> {
-//   const getUser = await this.UserModel.findOne({ where: { user_id } });
-//   if (!getUser) {
-//     throw new NotFoundException();
-//   }
-//   delete getUser.password;
-//   return getUser;
-// }
-// async profilePic(ProfilePicture: any, user_id: string): Promise<User> {
-//   return this.UserModel.findByIdAndUpdate(
-//     { user_id },
-//     { ProfilePicture },
-//     (err) => {
-//       if (err) {
-//         console.log(err);
-//       }
-//     },
-//   );
-// }
-// async updateOne(user: any): Promise<User> {
-//   return await this.UserModel.findByIdAndUpdate(
-//     user.user_id,
-//     user.profilePicture,
-//     {
-//       new: true,
-//     },
-//   );
-// }
-//  updateOne(user_id: string, user: User): Observable<any> {
-//     delete user.email;
-//     delete user.password;
-//     delete user.role;
-
-//     return from(this.UserModel.update(user)).pipe(
-//       switchMap(() => this.findUserById(user_id)),
-//     );
-//   }

@@ -22,6 +22,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Put } from '@nestjs/common';
 import { GetUser } from 'src/decorators/user-decorator';
 import { User } from 'src/schemas/user.schema';
+import { Deal } from 'src/schemas/deal.schema';
 
 export const storage = {
   storage: diskStorage({
@@ -43,7 +44,10 @@ export class DealController {
   constructor(private readonly dealService: DealService) {}
 
   @Post('/createDeal')
-  createDeal(@Body() createDealDto: CreateDealDto, @GetUser() user: User) {
+  createDeal(
+    @Body() createDealDto: CreateDealDto,
+    // @GetUser() userId: string,
+  ) {
     return this.dealService.createDeal(createDealDto);
   }
   @Post('/uploadDealImg')

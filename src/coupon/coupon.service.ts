@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Coupon, CouponDocument } from 'src/schemas/coupon.schema';
 import { CreateCouponDto } from './dto/create-coupon.dto';
@@ -12,7 +12,43 @@ export class CouponService {
     @InjectModel('User') private UserModel: Model<UserDocument>,
   ) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  create(createCouponDto: CreateCouponDto): Promise<Coupon> {
+  async create(createCouponDto: CreateCouponDto): Promise<Coupon> {
+    const {
+      coupon_name,
+      old_price,
+      new_price,
+      description,
+      deal_picture,
+      category,
+      coupon_type,
+      date_validation,
+      created_date,
+      reduc_esti,
+      userId
+    } = createCouponDto;
+    const user = await this.UserModel.findOne({ userId }).exec();
+    const newCoupon = new this.CouponModel({
+      coupon_name,
+      old_price,
+      new_price,
+      description,
+      deal_picture,
+      category,
+      coupon_type,
+      date_validation,
+      created_date,
+      reduc_esti,
+    });
+    try {
+      console.log(user);
+      await newCoupon.save();
+      await this.UserModel.findByIdAndUpdate(userId, {
+        $push: { coupon: newCoupon },
+      }).exec();
+      return newCoupon;
+    } catch (error) {
+      throw new InternalServerErrorException('check your details');
+    }
     return null;
   }
 

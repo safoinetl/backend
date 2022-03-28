@@ -15,7 +15,7 @@ import { DealModule } from 'src/deal/deal.module';
     JwtModule.register({
       secret: 'pestore2022',
       signOptions: {
-        expiresIn: 10000,
+        expiresIn: 3600,
       },
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),

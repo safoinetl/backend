@@ -15,8 +15,6 @@ export class Deal {
   // })
   // deal_id: string;
   @Prop()
-  deal_id: mongoose.Schema.Types.ObjectId;
-  @Prop()
   deal_name: string;
   @Prop()
   price: string;
