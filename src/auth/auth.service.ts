@@ -14,6 +14,7 @@ import { role } from '../enum/Role-Enum';
 import { JwtPayload } from 'src/Jwt/jwt-payload';
 import * as randomToken from 'rand-token';
 import * as moment from 'moment';
+import { sold } from 'src/enum/userSold.enum';
 @Injectable()
 export class AuthService {
   constructor(
@@ -54,6 +55,7 @@ export class AuthService {
       short_bio,
       long_bio,
       ProfilePicture,
+      sold: sold.SOLD,
     });
     const user = await this.UserModel.findOne({ email });
     if (user) {
@@ -83,7 +85,6 @@ export class AuthService {
       });
     }
   }
-  
 
   async getCategory() {
     return {

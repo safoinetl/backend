@@ -4,6 +4,7 @@ import { Document } from 'mongoose';
 import { address, education, links, professional } from 'src/dto/fields/fields';
 import { gender } from 'src/enum/gender-enum';
 import { role } from 'src/enum/Role-Enum';
+import { sold } from 'src/enum/userSold.enum';
 
 import { v4 as uuid } from 'uuid';
 import { Coupon } from './coupon.schema';
@@ -66,6 +67,8 @@ export class User {
   address: address;
   @Prop()
   links: links;
+  @Prop()
+  sold: sold;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => Deal })
   deal: Deal[];
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => Coupon })

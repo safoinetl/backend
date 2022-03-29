@@ -21,7 +21,7 @@ import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Put } from '@nestjs/common';
 import { GetUser } from 'src/decorators/user-decorator';
-import { User } from 'src/schemas/user.schema';
+import { User, UserDocument } from 'src/schemas/user.schema';
 import { Deal } from 'src/schemas/deal.schema';
 
 export const storage = {
@@ -65,18 +65,43 @@ export class DealController {
     return this.dealService.findAll();
   }
 
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id') deal_id: string) {
     return this.dealService.findOne(deal_id);
   }
 
-  @Put(':id')
-  update(@Param('id') user_id: string, @Body() updateDealDto: UpdateDealDto) {
-    return this.dealService.updateDeal(user_id, updateDealDto);
+  @Put('/:id')
+  update(@Param('id') deal_id: string, @Body() updateDealDto: UpdateDealDto) {
+    return this.dealService.updateDeal(deal_id, updateDealDto);
   }
+  // @Post('/create')
+  // create(
+  //   @Body() createDealDto: CreateDealDto,
+  //   @GetUser('user') user_id: string,
+  // ) {
+  //   return this.dealService.create(createDealDto, user_id);
+  // }
+  // @Put('/:deal_id')
+  // updatingDeal(
+  //   @Param('deal_id') deal_id: string,
+  //   @Body() dealupdtDTO: UpdateDealDto,
+  //   @GetUser('user') user_id: string,
+  //   //user_id: string,
+  // ): Promise<Deal> {
+  //   // const { user_id: user_id } = user;
+  //   return this.dealService.update(user_id, dealupdtDTO, deal_id);
+  // }
+  // async update(
+  //   @Param('id') id: string,
+  //   @Body() product: UpdateProductDTO,
+  //   @User() user: UserDocument,
+  // ): Promise<Product> {
+  //   const { id: userId } = user;
+  //   return await this.productService.update(id, product, userId);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dealService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.dealService.remove(+id);
+  // }
 }

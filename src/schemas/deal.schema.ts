@@ -7,13 +7,8 @@ import { User } from './user.schema';
 export type DealDocument = Deal & Document;
 @Schema()
 export class Deal {
-  // @Prop({
-  //   type: String,
-  //   default: function genUUID() {
-  //     return uuid();
-  //   },
-  // })
-  // deal_id: string;
+  @Prop()
+  deal_id: mongoose.Schema.Types.ObjectId;
   @Prop()
   deal_name: string;
   @Prop()

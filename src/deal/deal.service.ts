@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Deal, DealDocument } from 'src/schemas/deal.schema';
 import { CreateDealDto } from './dto/create-deal.dto';
@@ -12,56 +16,19 @@ export class DealService {
     @InjectModel('Deal') private DealModel: Model<DealDocument>,
     @InjectModel('User') private UserModel: Model<UserDocument>,
   ) {}
-  // async createDeal(createDealDto: CreateDealDto): Promise<Deal> {
-  //   const {
-  //     deal_name,
-  //     price,
-  //     description,
-  //     deal_picture,
-  //     category,
-  //     deal_type,
-  //     user_id,
-  //   } = createDealDto;
-  //   const user = this.DealModel.findOne({ user_id: user_id }).exec();
-  //   const newDeal = new this.DealModel({
-  //     deal_name,
-  //     price,
-  //     description,
-  //     deal_picture,
-  //     category,
-  //     deal_type,
-  //     user,
-  //   });
-  //   console.log(user);
-  //   try {
-  //     newDeal.save();
-  //     await this.UserModel.findByIdAndUpdate( user_id, {
-  //       $push: { deal: newDeal },
-  //     }).exec();
-  //     return newDeal;
-  //   } catch (error) {
-  //     throw new InternalServerErrorException('check your details');
-  //   }
-  // }
   async createDeal(createDealDto: CreateDealDto, user_id: string) {
-    const { deal_name, price, description, deal_picture, category, deal_type } =
-      createDealDto;
     const user = await this.UserModel.findById(user_id).exec();
     console.log(user);
-    const newDeal = new this.DealModel({
-      deal_name,
-      price,
-      description,
-      deal_picture,
-      category,
-      deal_type,
-      user,
-    });
-    const result = await newDeal.save();
-    await this.UserModel.findByIdAndUpdate(user_id, {
-      $push: { Deal: newDeal },
-    }).exec();
-    return { result, user };
+    const newDeal = new this.DealModel(createDealDto, user);
+    try {
+      await newDeal.save();
+      await this.UserModel.findByIdAndUpdate(user_id, {
+        $push: { Deal: newDeal },
+      }).exec();
+      return { user, newDeal };
+    } catch (error) {
+      throw new InternalServerErrorException('check');
+    }
   }
 
   findAll() {
@@ -73,39 +40,52 @@ export class DealService {
   }
 
   updateDeal(deal_id: string, updateDealDto: UpdateDealDto) {
-    this.DealModel.updateMany({ deal_id }, updateDealDto);
-    return this.findOne(deal_id);
+    const deal = this.DealModel.updateMany({ deal_id }, updateDealDto);
+    return deal;
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} deal`;
+  async create(createDealDto: CreateDealDto, user_id: string) {
+    const user = await this.UserModel.findById(user_id).exec();
+    const newDeal = new this.DealModel(createDealDto, user);
+    try {
+      await newDeal.save();
+      await this.UserModel.findByIdAndUpdate(user_id, {
+        $push: { Deal: newDeal },
+      }).exec();
+      return { newDeal, user };
+    } catch (error) {
+      throw new InternalServerErrorException('check');
+    }
   }
-  
-  // async update(
-  //   id: string,
-  //   productDTO: UpdateProductDTO,
-  //   userId: string,
-  // ): Promise<Product> {
-  //   const product = await this.productModel.findById(id);
-  //   if (userId !== product.owner.toString()) {
-  //     throw new HttpException(
-  //       'You do not own this product',
-  //       HttpStatus.UNAUTHORIZED,
-  //     );
-  //   }
-  //   await product.update(productDTO);
-  //   return await this.productModel.findById(id).populate('owner');
-  // }
-
-  // async delete(id: string, userId: string): Promise<Product> {
-  //   const product = await this.productModel.findById(id);
-  //   if (userId !== product.owner.toString()) {
-  //     throw new HttpException(
-  //       'You do not own this product',
-  //       HttpStatus.UNAUTHORIZED,
-  //     );
-  //   }
-  //   await product.remove();
-  //   return product.populate('owner');
-  // }
 }
+
+// remove(id: number) {
+//   return `This action removes a #${id} deal`;
+// }
+
+// async update(
+//   deal_id: string,
+//   dealupdtDTO: UpdateDealDto,
+//   user_id: string,
+// ): Promise<Deal> {
+//   const deal = await this.DealModel.findById(deal_id);
+//   if (user_id !== deal.user.toString()) {
+//     throw new UnauthorizedException({
+//       message: 'You do not own this product',
+//     });
+//   }
+//   await deal.updateOne({ deal_id }, dealupdtDTO);
+//   return await this.DealModel.findById(deal_id).populate('User');
+// }
+
+// async delete(id: string, user_id: string): Promise<Deal> {
+//   const product = await this.productModel.findById(id);
+//   if (userId !== product.owner.toString()) {
+//     throw new HttpException(
+//       'You do not own this product',
+//       HttpStatus.UNAUTHORIZED,
+//     );
+//   }
+//   await product.remove();
+//   return product.populate('owner');
+// }
+//
