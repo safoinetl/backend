@@ -4,18 +4,15 @@ import { dealType } from 'src/enum/deals-type-enum';
 
 export class CreateDealDto {
   @IsString()
-  deal_name: string;
+  title: string;
   @IsString()
   price: string;
-  @IsOptional()
-  description: string;
   @IsString()
-  deal_picture: string;
+  deal_description: string;
+  @IsString()
+  image: string;
   @IsString()
   category: [category];
   @IsString()
   deal_type: dealType;
-  
-
-   user_id: string;
 }

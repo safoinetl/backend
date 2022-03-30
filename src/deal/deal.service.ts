@@ -9,6 +9,7 @@ import { CreateDealDto } from './dto/create-deal.dto';
 import { UpdateDealDto } from './dto/update-deal.dto';
 import { Model } from 'mongoose';
 import { UserDocument } from 'src/schemas/user.schema';
+import { use } from 'passport';
 
 @Injectable()
 export class DealService {
@@ -17,18 +18,24 @@ export class DealService {
     @InjectModel('User') private UserModel: Model<UserDocument>,
   ) {}
   async createDeal(createDealDto: CreateDealDto, user_id: string) {
+    const { title, price, deal_description, category, deal_type, image } =
+      createDealDto;
     const user = await this.UserModel.findById(user_id).exec();
     console.log(user);
-    const newDeal = new this.DealModel(createDealDto, user);
-    try {
-      await newDeal.save();
-      await this.UserModel.findByIdAndUpdate(user_id, {
-        $push: { Deal: newDeal },
-      }).exec();
-      return { user, newDeal };
-    } catch (error) {
-      throw new InternalServerErrorException('check');
-    }
+    const newDeal = new this.DealModel({
+      title,
+      price,
+      deal_description,
+      image,
+      category,
+      deal_type,
+      user,
+    });
+    const result = await newDeal.save();
+    await this.UserModel.findByIdAndUpdate(user_id, {
+      $push: { deal: newDeal },
+    }).exec();
+    return { result, user };
   }
 
   findAll() {
@@ -43,19 +50,19 @@ export class DealService {
     const deal = this.DealModel.updateMany({ deal_id }, updateDealDto);
     return deal;
   }
-  async create(createDealDto: CreateDealDto, user_id: string) {
-    const user = await this.UserModel.findById(user_id).exec();
-    const newDeal = new this.DealModel(createDealDto, user);
-    try {
-      await newDeal.save();
-      await this.UserModel.findByIdAndUpdate(user_id, {
-        $push: { Deal: newDeal },
-      }).exec();
-      return { newDeal, user };
-    } catch (error) {
-      throw new InternalServerErrorException('check');
-    }
-  }
+  // async create(createDealDto: CreateDealDto, user_id: string) {
+  //   const user = await this.UserModel.findById(user_id).exec();
+  //   const newDeal = new this.DealModel(createDealDto, user);
+  //   try {
+  //     await newDeal.save();
+  //     await this.UserModel.findByIdAndUpdate(user_id, {
+  //       $push: { Deal: newDeal },
+  //     }).exec();
+  //     return { newDeal, user };
+  //   } catch (error) {
+  //     throw new InternalServerErrorException('check');
+  //   }
+  // }
 }
 
 // remove(id: number) {

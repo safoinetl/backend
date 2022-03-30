@@ -10,13 +10,13 @@ export class Deal {
   @Prop()
   deal_id: mongoose.Schema.Types.ObjectId;
   @Prop()
-  deal_name: string;
+  title: string;
   @Prop()
   price: string;
   @Prop()
-  description: string;
+  deal_description: string;
   @Prop()
-  deal_picture: string;
+  image: string;
   @Prop()
   category: [category];
   @Prop()
