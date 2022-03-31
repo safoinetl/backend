@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Res,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -23,7 +24,7 @@ import { Put } from '@nestjs/common';
 import { GetUser } from 'src/decorators/user-decorator';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { Deal } from 'src/schemas/deal.schema';
-
+import { getDealsfiltersDto } from '../dto/dealFilter.dto';
 export const storage = {
   storage: diskStorage({
     filename: (Req, file, callback) => {
@@ -33,7 +34,8 @@ export const storage = {
       const newpath = uuid();
       console.log(newpath);
       const path = `./DealUpload//${newpath}`;
-      fs.mkdirSync(path);
+      //fs.mkdirSync(path);
+      fs.promises.mkdir(path, { recursive: true });
       callback(null, path);
     },
   }),
@@ -69,39 +71,22 @@ export class DealController {
   findOne(@Param('id') deal_id: string) {
     return this.dealService.findOne(deal_id);
   }
-
-  @Put('/:id')
-  update(@Param('id') deal_id: string, @Body() updateDealDto: UpdateDealDto) {
-    return this.dealService.updateDeal(deal_id, updateDealDto);
+  @Put('/dealEdit/:id')
+  updateDeal(
+    @Param('id') deal_id: string,
+    @Body() updateDealDto: UpdateDealDto,
+    @GetUser() user_id: string,
+  ) {
+    return this.dealService.updateDeal(deal_id, updateDealDto, user_id);
   }
-  // @Post('/create')
-  // create(
-  //   @Body() createDealDto: CreateDealDto,
-  //   @GetUser('user') user_id: string,
-  // ) {
-  //   return this.dealService.create(createDealDto, user_id);
-  // }
-  // @Put('/:deal_id')
-  // updatingDeal(
-  //   @Param('deal_id') deal_id: string,
-  //   @Body() dealupdtDTO: UpdateDealDto,
-  //   @GetUser('user') user_id: string,
-  //   //user_id: string,
-  // ): Promise<Deal> {
-  //   // const { user_id: user_id } = user;
-  //   return this.dealService.update(user_id, dealupdtDTO, deal_id);
-  // }
-  // async update(
-  //   @Param('id') id: string,
-  //   @Body() product: UpdateProductDTO,
-  //   @User() user: UserDocument,
-  // ): Promise<Product> {
-  //   const { id: userId } = user;
-  //   return await this.productService.update(id, product, userId);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.dealService.remove(+id);
-  // }
+  @Delete('/deleteDeal/:id')
+  remove(@Param('id') deal_id: string, @GetUser('user') user_id: string) {
+    return this.dealService.deleteDeal(deal_id, user_id);
+  }
+  @Get('/DealSearch')
+  filterByCategory(@Query('category') getDealsfiltersDto: getDealsfiltersDto) {
+    return this.dealService.filterByCategory(getDealsfiltersDto);
+    // console.log([getDealsfiltersDto]);
+    // return [getDealsfiltersDto];
+  }
 }

@@ -5,9 +5,7 @@ import { InjectModel, Schema } from '@nestjs/mongoose';
 import { query } from 'express';
 import mongoose from 'mongoose';
 import { Model } from 'mongoose';
-import { switchMap, from, Observable } from 'rxjs';
-import { AuthCredentialsDto } from 'src/dto/auth-credentials.dto';
-import { GetProfileFilterDto } from 'src/dto/getProfileFilter.dto';
+import { getDealsfiltersDto } from 'src/dto/dealFilter.dto';
 import { UpdateProfileDto } from 'src/dto/updating_profile_info.dto';
 import { category } from 'src/enum/category-enum';
 import { UserDocument, User } from 'src/schemas/user.schema';
@@ -23,8 +21,6 @@ export class UserService {
 
   // async findUserById(userId: string): Promise<User> {
   //   return this.UserModel.findOne({ userId: userId });
-
- 
 
   async updateProfile(data: UpdateProfileDto, user_id: string) {
     const update = await this.UserModel.findByIdAndUpdate(user_id, data);

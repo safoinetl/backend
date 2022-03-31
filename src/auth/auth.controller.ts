@@ -70,10 +70,10 @@ export class AuthController {
     });
   }
 
-  // @Get('/intndspc')
-  // getCategory(){
-  //   return this.authService.getCategory();
-  // }
+  @Get('/intndspc')
+  getCategory(){
+    return this.authService.getCategory();
+  }
 }
 
 // @Post('/profilePic')
