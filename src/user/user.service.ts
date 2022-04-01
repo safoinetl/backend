@@ -11,32 +11,26 @@ import { category } from 'src/enum/category-enum';
 import { UserDocument, User } from 'src/schemas/user.schema';
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private UserModel: Model<UserDocument>) {} // @InjectModel('User') private readonly userModel: Model<UserDocument>,
-  // async getAllProfiles(
-  //   GetProfileFilterDto: GetProfileFilterDto,
-  // ): Promise<User[]> {
-  //   const users = new this.UserModel();
-  //   return users;
-  // }
-
-  // async findUserById(userId: string): Promise<User> {
-  //   return this.UserModel.findOne({ userId: userId });
-
+  constructor(@InjectModel('User') private UserModel: Model<UserDocument>) {}
   async updateProfile(data: UpdateProfileDto, user_id: string) {
     const update = await this.UserModel.findByIdAndUpdate(user_id, data);
 
     if (!update) {
-      throw new NotFoundException();
+      throw new NotFoundException({ message: 'user not found' });
     }
     return update;
   }
 
   findOne(user: User) {
-    // const resultat = this.UserModel.find();
-    // return resultat;
     return this.UserModel.findOne(user);
   }
-  getImage(user: User) {
-    // const getimage = this.UserModel.$where(user.image);
+  getImage(ProfilePicture: string) {
+    const getimage = this.UserModel.findOne({ ProfilePicture });
+    return getimage;
   }
+
+
+
+
+  
 }

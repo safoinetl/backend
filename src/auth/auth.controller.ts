@@ -1,12 +1,11 @@
 import {
   Controller,
   Get,
-  HttpCode,
   HttpStatus,
   Param,
   Req,
   UploadedFile,
-  UseGuards,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -22,8 +21,19 @@ import { AuthGuard } from '@nestjs/passport';
 import { v4 as uuid } from 'uuid';
 import * as fs from 'fs';
 import { category } from 'src/enum/category-enum';
-import { join } from 'path';
+import * as path from 'path';
 import { of } from 'rxjs';
+import { Helper } from 'src/shared/helper';
+import { join } from 'path';
+export const storage = {
+  storage: diskStorage({
+    destination: './uploads',
+    filename: (req, file, cb) => {
+      const filename = file.originalname;
+      cb(null, `${filename}`);
+    },
+  }),
+};
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -51,16 +61,18 @@ export class AuthController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        filename: (Req, file, callback) => {
-          callback(null, file.originalname);
-        },
-        destination: (req, file, callback) => {
-          const newpath = uuid();
-          console.log(newpath);
-          const path = `./uploads/${newpath}`;
-          fs.mkdirSync(path);
-          callback(null, path);
-        },
+        destination: Helper.destinationPath,
+        filename: Helper.customFileName,
+        // filename: (Req, file, callback) => {
+        //   callback(null, file.originalname);
+        // },
+        // destination: (req, file, callback) => {
+        //   const newpath = uuid();
+        //   console.log(newpath);
+          // const path = `./uploads/${newpath}`;
+          // fs.mkdirSync(path);
+          // callback(null, path);
+        //},
       }),
     }),
   )
@@ -71,14 +83,28 @@ export class AuthController {
       response: image,
     });
   }
-  @Get('profile-image/:imagename')
+  @Get('profile-image/:image')
   findProfileImage(@Param('image') image, @Res() res) {
-    return of(res.sendFile(join(process.cwd(), `./uploads//` + image)));
+    return of(res.sendFile(join(process.cwd(), `./images/` + image)));
   }
 
   @Get('/intndspc')
   getCategory() {
     return this.authService.getCategory();
+  }
+
+  @Post('file-upload')
+  @UseInterceptors(
+    FileInterceptor('picture', {
+      storage: diskStorage({
+        destination: Helper.destinationPath,
+        filename: Helper.customFileName,
+      }),
+    }),
+  )
+  uploadfile(@UploadedFiles() file, @Res() Res) {
+    console.log(file.path);
+    return Res.send(file);
   }
 }
 

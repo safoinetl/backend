@@ -22,15 +22,7 @@ import { v4 as uuid } from 'uuid';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateProfileDto } from 'src/dto/updating_profile_info.dto';
 import { category } from 'src/enum/category-enum';
-export const storage = {
-  storage: diskStorage({
-    destination: './uploads/profileimages',
-    filename: (req, file, cb) => {
-      const filename = file.originalname;
-      cb(null, `${filename}`);
-    },
-  }),
-};
+ 
 @Controller('user')
 @UseGuards(AuthGuard('jwt'))
 export class UserController {
@@ -60,14 +52,8 @@ export class UserController {
   async getFile(@Param('image') image: string, @Res() res: any) {
     res.sendFile(image, { root: `./uploads/ ` });
   }
-  // @Post('/upload')
-  // @UseInterceptors(FileInterceptor('ProfilePicture', storage))
-  // uploadProfilePic(@UploadedFile() file, @Request() req): Observable<any> {
-  //   const user = req.user;
-  //   console.log(user);
-  //   // return file.path;
-  //   return this.userService
-  //     .updateOne(user.user_id, file.path)
-  //     .pipe(map(user.profilePicture));
-  // }
+  @Get('/:ProfilePicture')
+  getImage(@Param('ProfilePicture') ProfilePicture: string) {
+    return this.userService.getImage(ProfilePicture);
+  }
 }
