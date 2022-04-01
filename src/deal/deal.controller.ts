@@ -25,6 +25,7 @@ import { GetUser } from 'src/decorators/user-decorator';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { Deal } from 'src/schemas/deal.schema';
 import { getDealsfiltersDto } from '../dto/dealFilter.dto';
+import { category } from '../enum/category-enum';
 export const storage = {
   storage: diskStorage({
     filename: (Req, file, callback) => {
@@ -58,10 +59,10 @@ export class DealController {
   uploadFile(@UploadedFile() file) {
     return file.path;
   }
-  @Get('/image/:imgpath')
-  seeUpoaderFile(@Param('imgpath') image, @Res() res) {
-    return res.sendFile(image, { root: 'uploads' });
-  }
+  // @Get('/image/:imgpath')
+  // seeUpoaderFile(@Param('imgpath') image, @Res() res) {
+  //   return res.sendFile(image, { root: 'uploads' });
+  // }
   @Get('allDeals')
   findAll() {
     return this.dealService.findAll();
@@ -83,10 +84,12 @@ export class DealController {
   remove(@Param('id') deal_id: string, @GetUser('user') user_id: string) {
     return this.dealService.deleteDeal(deal_id, user_id);
   }
-  @Get('/DealSearch')
-  filterByCategory(@Query('category') getDealsfiltersDto: getDealsfiltersDto) {
-    return this.dealService.filterByCategory(getDealsfiltersDto);
-    // console.log([getDealsfiltersDto]);
-    // return [getDealsfiltersDto];
+  @Get('/DealSearch/:category')
+  filterByCategory(@Param() deal: Deal) {
+    return this.dealService.filterByCategory(deal);
+  }
+  @Get('/Deal/:title')
+  filterByTitle(@Param('title') deal: Deal) {
+    return this.dealService.filterByTitle(deal);
   }
 }

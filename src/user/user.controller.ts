@@ -10,6 +10,7 @@ import {
   Request,
   Put,
   ValidationPipe,
+  Res,
 } from '@nestjs/common';
 import { GetUser } from 'src/decorators/user-decorator';
 import { User } from 'src/schemas/user.schema';
@@ -55,7 +56,10 @@ export class UserController {
   async findOne(@GetUser('user') user: User): Promise<User> {
     return this.userService.findOne(user);
   }
-
+  @Get('/:filename')
+  async getFile(@Param('image') image: string, @Res() res: any) {
+    res.sendFile(image, { root: `./uploads/ ` });
+  }
   // @Post('/upload')
   // @UseInterceptors(FileInterceptor('ProfilePicture', storage))
   // uploadProfilePic(@UploadedFile() file, @Request() req): Observable<any> {

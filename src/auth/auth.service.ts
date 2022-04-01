@@ -12,9 +12,8 @@ import { UserDocument } from 'src/schemas/user.schema';
 import { signInDto } from '../dto/signin.Dto';
 import { role } from '../enum/Role-Enum';
 import { JwtPayload } from 'src/Jwt/jwt-payload';
-import * as randomToken from 'rand-token';
-import * as moment from 'moment';
 import { sold } from 'src/enum/userSold.enum';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -32,7 +31,7 @@ export class AuthService {
       phone,
       interests,
       specialities,
-      role,
+       role,
       Brand_Name,
       M_F,
       short_bio,
@@ -60,7 +59,6 @@ export class AuthService {
     const user = await this.UserModel.findOne({ email });
     if (user) {
       throw new ConflictException({ message: 'user already exist' });
-      // throw new HttpException('user already exist', HttpStatus.BAD_REQUEST);
     } else {
       await newUser.save();
       console.log(newUser);
@@ -71,7 +69,6 @@ export class AuthService {
   async signIn(signinDto: signInDto) {
     const { email, password } = signinDto;
     const users = await this.UserModel.findOne({ email: email });
-    //const passValidate = bcrypt.compare(password, users.password);
     const passValidate = await bcrypt.compare(password, users.password);
     if (users && passValidate) {
       /* it will do a comparation between your input and the base de donnees if its true it will return a succed message else it throw an error */
@@ -87,34 +84,35 @@ export class AuthService {
   }
 
   async getCategory() {
-    return {
-      ADVICE: 'Advice',
-      ANIMALS_AWWS: 'Animals & Awws',
-      ANIME: 'Anime',
-      ARTANDDESIGN: 'Art & Design',
-      BEAUTY: 'Beauty',
-      DIYANDHOME: 'Diy & Home',
-      ENTERTAIMENT: 'Entertaiment',
-      FASHION: 'Fashion',
-      FINANCEANDBUSINESS: 'Finance & Business',
-      FOOD: 'Food',
-      FUNNY: 'Funny',
-      GAMING: 'Gaming',
-      HEALTHANDLIFESTYLE: 'Health & Lifestyle',
-      HOBBIES: 'Hobbies',
-      LIVESTREAMS: 'Livestreams',
-      MUSIC: 'Music',
-      NEWS: 'News',
-      OUTDOORS: 'Outdoors',
-      READINANDLITERATURE: 'Reading & Literature',
-      RELATIONSHIPS: 'Relationships',
-      EDUCATION: 'Education',
-      SCIENCE: 'Science',
-      SPORTS: 'Technology',
-      TRAVEL: 'Travel',
-      NATURE: 'Nature',
-      JOB: 'Job',
-    };
+    const topic = [
+      { _id: '1', value: 'Advice' },
+      { _id: '2', value: 'Animals & Awws' },
+      { _id: '3', value: 'Anime' },
+      { _id: '4', value: 'Art & Design' },
+      { _id: '5', value: 'Beauty' },
+      { _id: '6', value: 'Diy & Home' },
+      { _id: '7', value: 'Entertaiment' },
+      { _id: '8', value: 'Fashion' },
+      { _id: '9', value: 'Finance & Business' },
+      { _id: '10', value: 'Food' },
+      { _id: '11', value: 'Funny' },
+      { _id: '12', value: 'Gaming' },
+      { _id: '13', value: 'Health & Lifestyle' },
+      { _id: '14', value: 'Hobbies' },
+      { _id: '15', value: 'Livestreams' },
+      { _id: '16', value: 'Music' },
+      { _id: '17', value: 'News' },
+      { _id: '18', value: 'Outdoors' },
+      { _id: '19', value: 'Reading & Literature' },
+      { _id: '20', value: 'Relationships' },
+      { _id: '21', value: 'Education' },
+      { _id: '22', value: 'Science' },
+      { _id: '23', value: 'Technology' },
+      { _id: '24', value: 'Travel' },
+      { _id: '25', value: 'Nature' },
+      { _id: '26', value: 'Job' },
+    ];
+    return topic;
   }
   // async getRefreshToken(): Promise<string> {
   //   const userDataToUpdate = {

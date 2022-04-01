@@ -36,4 +36,7 @@ export class UserService {
     // return resultat;
     return this.UserModel.findOne(user);
   }
+  getImage(user: User) {
+    // const getimage = this.UserModel.$where(user.image);
+  }
 }

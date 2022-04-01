@@ -22,6 +22,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { v4 as uuid } from 'uuid';
 import * as fs from 'fs';
 import { category } from 'src/enum/category-enum';
+import { join } from 'path';
+import { of } from 'rxjs';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -55,7 +57,7 @@ export class AuthController {
         destination: (req, file, callback) => {
           const newpath = uuid();
           console.log(newpath);
-          const path = `./uploads//${newpath}`;
+          const path = `./uploads/${newpath}`;
           fs.mkdirSync(path);
           callback(null, path);
         },
@@ -69,9 +71,13 @@ export class AuthController {
       response: image,
     });
   }
+  @Get('profile-image/:imagename')
+  findProfileImage(@Param('image') image, @Res() res) {
+    return of(res.sendFile(join(process.cwd(), `./uploads//` + image)));
+  }
 
   @Get('/intndspc')
-  getCategory(){
+  getCategory() {
     return this.authService.getCategory();
   }
 }

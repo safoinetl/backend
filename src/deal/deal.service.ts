@@ -13,6 +13,7 @@ import { UserDocument } from 'src/schemas/user.schema';
 import { use } from 'passport';
 import mongoose from 'mongoose';
 import { getDealsfiltersDto } from 'src/dto/dealFilter.dto';
+import { category } from 'src/enum/category-enum';
 //import { category } from 'src/enum/category-enum';
 
 @Injectable()
@@ -90,24 +91,17 @@ export class DealService {
   //   const { search, category } = getDealDto;
   //   const query = await this.DealModel.
   // }
-  async filterByCategory(getDealDto: getDealsfiltersDto) {
-    const { category, search } = getDealDto;
-    // const deals = await this.DealModel.find({ category });
-    // console.log(category);
-    // return deals;
-     const query = this.DealModel.find();
-    // if (category) {
-    //   query.$where(category);
-    //   //query.andWhere('task.status = :status', { category: category});
-    // }
-    // if (search) {
-    //   query.$where(
-    //     // 'LOWER(deal.title) LIKE LOWER(:search) OR LOWER(deal.deal_description) LIKE LOWER(:search)',
-    //     `%${search}%`,
-    //   );
-    // }
-    // const deals = await this.DealModel.find({ category });
-    // return deals;
-    query.$where('category');
+  async filterByCategory(deal: Deal) {
+    const categFind = this.DealModel.find({
+      category: { $regex: deal.category },
+    });
+    return categFind;
   }
+  async filterByTitle(deal: Deal) {
+    const Find = this.DealModel.find({
+      title: { $regex: deal.title },
+    });
+    return Find;
+  }
+
 }
