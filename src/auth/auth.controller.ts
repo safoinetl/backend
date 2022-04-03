@@ -69,25 +69,28 @@ export class AuthController {
         // destination: (req, file, callback) => {
         //   const newpath = uuid();
         //   console.log(newpath);
-          // const path = `./uploads/${newpath}`;
-          // fs.mkdirSync(path);
-          // callback(null, path);
+        // const path = `./uploads/${newpath}`;
+        // fs.mkdirSync(path);
+        // callback(null, path);
         //},
       }),
     }),
   )
   uploadFile(@UploadedFile() file, @Res() res) {
     // return
-    const image = file.path;
+    const image = file.filename;
     return res.status(HttpStatus.CREATED).json({
       response: image,
     });
   }
-  @Get('profile-image/:image')
-  findProfileImage(@Param('image') image, @Res() res) {
-    return of(res.sendFile(join(process.cwd(), `./images/` + image)));
+  @Get(':imgpath')
+  seeUploadedFile(@Param('imgpath') image, @Res() res) {
+    return res.sendFile(image, { root: './images' });
   }
-
+  // @Get('profile-image/:image')
+  // findProfileImage(@Param('image') image, @Res() res) {
+  //   return of(res.sendFile(join(process.cwd(), `./images/${image}`)));
+  // }
   @Get('/intndspc')
   getCategory() {
     return this.authService.getCategory();

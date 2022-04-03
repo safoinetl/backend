@@ -48,12 +48,4 @@ export class UserController {
   async findOne(@GetUser('user') user: User): Promise<User> {
     return this.userService.findOne(user);
   }
-  @Get('/:filename')
-  async getFile(@Param('image') image: string, @Res() res: any) {
-    res.sendFile(image, { root: `./uploads/ ` });
-  }
-  @Get('/:ProfilePicture')
-  getImage(@Param('ProfilePicture') ProfilePicture: string) {
-    return this.userService.getImage(ProfilePicture);
-  }
 }

@@ -12,6 +12,7 @@ import { DealModule } from 'src/deal/deal.module';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
+
     JwtModule.register({
       secret: 'pestore2022',
       signOptions: {

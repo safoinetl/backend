@@ -31,7 +31,7 @@ export class AuthService {
       phone,
       interests,
       specialities,
-       role,
+      role,
       Brand_Name,
       M_F,
       short_bio,
