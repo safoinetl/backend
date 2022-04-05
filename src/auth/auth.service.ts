@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AuthCredentialsDto } from '../dto/auth-credentials.dto';
+import { AuthCredentialsDto } from '../dto/authDto/auth-credentials.Dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserDocument } from 'src/schemas/user.schema';
-import { signInDto } from '../dto/signin.Dto';
+import { signInDto } from '../dto/authDto/signin.Dto';
 import { role } from '../enum/Role-Enum';
 import { JwtPayload } from 'src/Jwt/jwt-payload';
 import { sold } from 'src/enum/userSold.enum';

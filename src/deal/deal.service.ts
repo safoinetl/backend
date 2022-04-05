@@ -6,13 +6,13 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Deal, DealDocument } from 'src/schemas/deal.schema';
-import { CreateDealDto } from './dto/create-deal.dto';
-import { UpdateDealDto } from './dto/update-deal.dto';
+import { CreateDealDto } from '../dto/dealdto/create-deal.dto';
+import { UpdateDealDto } from '../dto/dealdto/update-deal.dto';
 import { Model } from 'mongoose';
 import { UserDocument } from 'src/schemas/user.schema';
 import { use } from 'passport';
 import mongoose from 'mongoose';
-import { getDealsfiltersDto } from 'src/dto/dealFilter.dto';
+import { getDealsfiltersDto } from 'src/dto/authDto/dealFilter.dto';
 import { category } from 'src/enum/category-enum';
 //import { category } from 'src/enum/category-enum';
 
@@ -23,7 +23,7 @@ export class DealService {
     @InjectModel('User') private UserModel: Model<UserDocument>,
   ) {}
   async createDeal(createDealDto: CreateDealDto, user_id: string) {
-    const { title, price, deal_description, category, deal_type, image } =
+    const { title, price, deal_description, category, deal_type, images } =
       createDealDto;
     const user = await this.UserModel.findById(user_id).exec();
     console.log(user);
@@ -31,7 +31,7 @@ export class DealService {
       title,
       price,
       deal_description,
-      image,
+      images,
       category,
       deal_type,
       user,
@@ -87,21 +87,18 @@ export class DealService {
       return message;
     }
   }
-  // async searchDeals(getDealDto: getDealsfiltersDto) {
-  //   const { search, category } = getDealDto;
-  //   const query = await this.DealModel.
-  // }
   async filterByCategory(deal: Deal) {
     const categFind = this.DealModel.find({
       category: { $regex: deal.category },
     });
     return categFind;
   }
-  async filterByTitle(deal: Deal) {
+  async filterByTitle(title: string) {
     const Find = this.DealModel.find({
-      title: { $regex: deal.title },
+     // title: title,
+     title: { $regex: title },
     });
     return Find;
   }
-
+ 
 }

@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { gender } from 'src/enum/gender-enum';
 import { sold } from 'src/enum/userSold.enum';
-import { role } from '../enum/Role-Enum';
+import { role } from '../../enum/Role-Enum';
 import { address, education, links, professional } from './fields/fields';
 export class AuthCredentialsDto {
   @IsString()

@@ -10,7 +10,7 @@ export class CreateDealDto {
   @IsString()
   deal_description: string;
   @IsString()
-  image: string;
+  images: string;
   @IsString()
   category: [category];
   @IsString()

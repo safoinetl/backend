@@ -8,6 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from 'src/Jwt/jwt-strategy';
 import { UserModule } from 'src/user/user.module';
 import { DealModule } from 'src/deal/deal.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -19,6 +20,9 @@ import { DealModule } from 'src/deal/deal.module';
         expiresIn: 3600,
       },
     }),
+    // MulterModule.register({
+    //   dest: './images',
+    // }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     AuthModule,
   ],

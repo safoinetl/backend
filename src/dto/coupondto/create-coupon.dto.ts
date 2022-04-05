@@ -12,17 +12,17 @@ export class CreateCouponDto {
   @IsString()
   description: string;
   @IsString()
-  deal_picture: string;
+  image: string[];
   @IsString()
   category: [category];
   @IsString()
   coupon_type: dealType;
-  @IsDate()
+  @IsString()
   date_validation: Date;
-  @IsDate()
+  @IsString()
   created_date: Date;
   @IsString()
   reduc_esti: string;
-  @IsOptional()
-  userId: string;
+  @IsString()
+  limit: string;
 }

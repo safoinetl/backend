@@ -10,12 +10,15 @@ import {
   UploadedFile,
   Res,
   Query,
+  HttpStatus,
+  UploadedFiles,
+  StreamableFile,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { DealService } from './deal.service';
-import { CreateDealDto } from './dto/create-deal.dto';
-import { UpdateDealDto } from './dto/update-deal.dto';
+import { CreateDealDto } from '../dto/dealdto/create-deal.dto';
+import { UpdateDealDto } from '../dto/dealdto/update-deal.dto';
 import { v4 as uuid } from 'uuid';
 import * as fs from 'fs';
 import { UseGuards } from '@nestjs/common';
@@ -24,23 +27,12 @@ import { Put } from '@nestjs/common';
 import { GetUser } from 'src/decorators/user-decorator';
 import { User, UserDocument } from 'src/schemas/user.schema';
 import { Deal } from 'src/schemas/deal.schema';
-import { getDealsfiltersDto } from '../dto/dealFilter.dto';
+import { getDealsfiltersDto } from '../dto/authDto/dealFilter.dto';
 import { category } from '../enum/category-enum';
-export const storage = {
-  storage: diskStorage({
-    filename: (Req, file, callback) => {
-      callback(null, file.originalname);
-    },
-    destination: (req, file, callback) => {
-      const newpath = uuid();
-      console.log(newpath);
-      const path = `./DealUpload//${newpath}`;
-      //fs.mkdirSync(path);
-      fs.promises.mkdir(path, { recursive: true });
-      callback(null, path);
-    },
-  }),
-};
+import { DealHelper } from 'src/shared/dealHelper';
+import { imageFileFilter } from 'src/shared/ImageValidation';
+import { join } from 'path';
+
 @Controller('deal')
 @UseGuards(AuthGuard('jwt'))
 export class DealController {
@@ -54,15 +46,6 @@ export class DealController {
     console.log(user_id);
     return this.dealService.createDeal(createDealDto, user_id);
   }
-  @Post('/uploadDealImg')
-  @UseInterceptors(FileInterceptor('dealPic', storage))
-  uploadFile(@UploadedFile() file) {
-    return file.path;
-  }
-  // @Get('/image/:imgpath')
-  // seeUpoaderFile(@Param('imgpath') image, @Res() res) {
-  //   return res.sendFile(image, { root: 'uploads' });
-  // }
   @Get('allDeals')
   findAll() {
     return this.dealService.findAll();
@@ -88,8 +71,41 @@ export class DealController {
   filterByCategory(@Param() deal: Deal) {
     return this.dealService.filterByCategory(deal);
   }
-  @Get('/Deal/:title')
-  filterByTitle(@Param('title') deal: Deal) {
-    return this.dealService.filterByTitle(deal);
+  @Get('/DealsearchByTitle/:title')
+  filterByTitle(@Param('title') title: string) {
+    return this.dealService.filterByTitle(title);
   }
-}
+
+  @Post('/uploadDealImgs')
+  @UseInterceptors(
+    FilesInterceptor('image', 10, {
+      storage: diskStorage({
+        destination: DealHelper.destinationPath,
+        filename: DealHelper.customFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  async uploadMultipleFiles(@UploadedFiles() files, @Res() res) {
+    const response = [];
+    files.forEach((file) => {
+      const fileReponse = file.filename;
+      response.push({ fileReponse });
+    });
+    return res.status(HttpStatus.CREATED).json({
+      response: response,
+    });
+  }
+  @Get('/dealImgs/:imgpath')
+  seeUploadedFile(@Param('imgpath') images, @Res() res) {
+    return res.sendFile(images, { root: './dealimages' });
+  }
+  
+  }
+  // @Get('/img/:deal_id')
+  // findallPic(@Param('deal_id') deal_id, @Res() res, deal: Deal) {
+  //   const response = this.dealService.findallPic(deal_id, deal);
+  //   return res.status(HttpStatus.OK).json({
+  //     response: response,
+  //   });
+  // }

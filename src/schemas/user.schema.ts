@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Document } from 'mongoose';
-import { address, education, links, professional } from 'src/dto/fields/fields';
+import { address, education, links, professional } from 'src/dto/authDto/fields/fields';
 import { gender } from 'src/enum/gender-enum';
 import { role } from 'src/enum/Role-Enum';
 import { sold } from 'src/enum/userSold.enum';

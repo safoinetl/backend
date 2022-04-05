@@ -16,7 +16,7 @@ export class Deal {
   @Prop()
   deal_description: string;
   @Prop()
-  image: string;
+  images: string[];
   @Prop()
   category: [category];
   @Prop()

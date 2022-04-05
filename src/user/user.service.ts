@@ -5,8 +5,8 @@ import { InjectModel, Schema } from '@nestjs/mongoose';
 import { query } from 'express';
 import mongoose from 'mongoose';
 import { Model } from 'mongoose';
-import { getDealsfiltersDto } from 'src/dto/dealFilter.dto';
-import { UpdateProfileDto } from 'src/dto/updating_profile_info.dto';
+import { getDealsfiltersDto } from 'src/dto/authDto/dealFilter.dto';
+import { UpdateProfileDto } from 'src/dto/authDto/updating_profile_info.dto';
 import { category } from 'src/enum/category-enum';
 import { UserDocument, User } from 'src/schemas/user.schema';
 @Injectable()
