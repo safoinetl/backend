@@ -8,7 +8,7 @@ export class UpdateDealDto extends PartialType(CreateDealDto) {
   @IsOptional()
   deal_name: string;
   @IsOptional()
-  price: string;
+  price: number;
   @IsOptional()
   description: string;
   @IsOptional()

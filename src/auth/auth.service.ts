@@ -13,6 +13,7 @@ import { signInDto } from '../dto/authDto/signin.Dto';
 import { role } from '../enum/Role-Enum';
 import { JwtPayload } from 'src/Jwt/jwt-payload';
 import { sold } from 'src/enum/userSold.enum';
+import * as moment from 'moment';
 
 @Injectable()
 export class AuthService {
@@ -54,6 +55,7 @@ export class AuthService {
       short_bio,
       long_bio,
       ProfilePicture,
+      created_date: moment().format(),
       sold: sold.SOLD,
     });
     const user = await this.UserModel.findOne({ email });

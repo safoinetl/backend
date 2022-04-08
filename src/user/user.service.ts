@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 import { getDealsfiltersDto } from 'src/dto/authDto/dealFilter.dto';
 import { UpdateProfileDto } from 'src/dto/authDto/updating_profile_info.dto';
 import { category } from 'src/enum/category-enum';
+import { Deal, DealDocument } from 'src/schemas/deal.schema';
 import { UserDocument, User } from 'src/schemas/user.schema';
 @Injectable()
 export class UserService {
@@ -28,9 +29,4 @@ export class UserService {
     const getimage = this.UserModel.findOne({ ProfilePicture });
     return getimage;
   }
-
-
-
-
-  
 }

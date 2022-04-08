@@ -55,7 +55,7 @@ export class AuthController {
       response: image,
     });
   }
-  @Get(':imgpath')
+  @Get('/:imgpath')
   seeUploadedFile(@Param('imgpath') image, @Res() res) {
     return res.sendFile(image, { root: './images' });
   }
@@ -64,4 +64,3 @@ export class AuthController {
     return this.authService.getCategory();
   }
 }
-//////  problem searching by title

@@ -4,11 +4,13 @@ import { dealType } from 'src/enum/deals-type-enum';
 
 export class UpdateCouponDto {
   @IsOptional()
+  price: number;
+  @IsOptional()
   coupon_name: string;
   @IsOptional()
-  old_price: string;
+  old_price: number;
   @IsOptional()
-  new_price: string;
+  new_price: number;
   @IsOptional()
   description: string;
   @IsOptional()
@@ -24,5 +26,5 @@ export class UpdateCouponDto {
   @IsOptional()
   reduc_esti: string;
   @IsOptional()
-  limit: string;
+  limit: number;
 }

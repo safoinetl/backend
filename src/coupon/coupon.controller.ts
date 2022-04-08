@@ -23,7 +23,7 @@ import { CouponService } from './coupon.service';
 import { UpdateCouponDto } from 'src/dto/coupondto/update-coupon.dto';
 import { CreateCouponDto } from 'src/dto/coupondto/create-coupon.dto';
 @Controller('coupon')
-//@UseGuards(AuthGuard())
+@UseGuards(AuthGuard())
 export class CouponController {
   constructor(private readonly couponService: CouponService) {}
 
@@ -32,10 +32,11 @@ export class CouponController {
     @Body() createCouponDto: CreateCouponDto,
     @GetUser('user') user_id: string,
   ) {
-    return this.couponService.create(createCouponDto, user_id);
+    console.log(user_id);
+    return this.couponService.createCoupon(createCouponDto, user_id);
   }
 
-  @Get()
+  @Get('/allCoupon')
   findAll() {
     return this.couponService.findAll();
   }
@@ -47,15 +48,15 @@ export class CouponController {
 
   @Put('/:id')
   update(
-    @Param('id') user_id: string,
+    @Param('id') coupon_id: string,
     @Body() updateCouponDto: UpdateCouponDto,
-    coupon_id: string,
+    @GetUser() user_id: string,
   ) {
     return this.couponService.updateCoupon(user_id, updateCouponDto, coupon_id);
   }
 
   @Delete('/:id')
-  remove(@Param('id') coupon_id: string, user_id: string) {
+  remove(@Param('id') coupon_id: string, @GetUser() user_id: string) {
     return this.couponService.deleteCoupon(coupon_id, user_id);
   }
   @Get('/couponsearch/:name')

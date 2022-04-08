@@ -7,6 +7,7 @@ import { role } from 'src/enum/Role-Enum';
 import { sold } from 'src/enum/userSold.enum';
 
 import { v4 as uuid } from 'uuid';
+import { Cart } from './cart.schema';
 import { Coupon } from './coupon.schema';
 import { Deal } from './deal.schema';
 
@@ -26,8 +27,9 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({ type: String, required: true, trim: true, minlength: 6 })
   password: string;
+  
 
   @Prop()
   name: string;
@@ -68,11 +70,14 @@ export class User {
   @Prop()
   links: links;
   @Prop()
+  created_date: Date;
+  @Prop()
   sold: sold;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => Deal })
   deal: Deal[];
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => Coupon })
   coupon: Coupon[];
-  static user_id: any;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => Cart })
+  cart: Cart[];
 }
 export const UserSchema = SchemaFactory.createForClass(User);

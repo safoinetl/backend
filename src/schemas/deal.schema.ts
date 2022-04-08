@@ -12,7 +12,7 @@ export class Deal {
   @Prop()
   title: string;
   @Prop()
-  price: string;
+  price: number;
   @Prop()
   deal_description: string;
   @Prop()
@@ -22,7 +22,7 @@ export class Deal {
   @Prop()
   deal_type: dealType;
   @Prop()
-  date: Date;
+  created_date: Date;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => User })
   user: User;
 }

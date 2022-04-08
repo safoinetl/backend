@@ -1,6 +1,5 @@
 import {
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -10,11 +9,7 @@ import { CreateDealDto } from '../dto/dealdto/create-deal.dto';
 import { UpdateDealDto } from '../dto/dealdto/update-deal.dto';
 import { Model } from 'mongoose';
 import { UserDocument } from 'src/schemas/user.schema';
-import { use } from 'passport';
-import mongoose from 'mongoose';
-import { getDealsfiltersDto } from 'src/dto/authDto/dealFilter.dto';
-import { category } from 'src/enum/category-enum';
-//import { category } from 'src/enum/category-enum';
+import * as moment from 'moment';
 
 @Injectable()
 export class DealService {
@@ -22,6 +17,7 @@ export class DealService {
     @InjectModel('Deal') private DealModel: Model<DealDocument>,
     @InjectModel('User') private UserModel: Model<UserDocument>,
   ) {}
+
   async createDeal(createDealDto: CreateDealDto, user_id: string) {
     const { title, price, deal_description, category, deal_type, images } =
       createDealDto;
@@ -34,6 +30,7 @@ export class DealService {
       images,
       category,
       deal_type,
+      created_date: moment().format(),
       user,
     });
     const result = await newDeal.save();
@@ -95,10 +92,10 @@ export class DealService {
   }
   async filterByTitle(title: string) {
     const Find = this.DealModel.find({
-     // title: title,
-     title: { $regex: title },
+      // title: title,
+      title: { $regex: title },
     });
     return Find;
   }
- 
+
 }

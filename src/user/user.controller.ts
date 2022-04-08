@@ -9,7 +9,6 @@ import {
   UseInterceptors,
   Request,
   Put,
-  ValidationPipe,
   Res,
 } from '@nestjs/common';
 import { GetUser } from 'src/decorators/user-decorator';

@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from 'src/Jwt/jwt-strategy';
 import { AuthModule } from 'src/auth/auth.module';
+import { DealSchema } from 'src/schemas/deal.schema';
 
 @Module({
   imports: [

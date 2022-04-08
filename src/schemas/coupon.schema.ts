@@ -8,23 +8,23 @@ export type CouponDocument = Coupon & Document;
 @Schema()
 export class Coupon {
   @Prop()
+  price: number;
+  @Prop()
   coupon_id: mongoose.Schema.Types.ObjectId;
   @Prop()
   coupon_name: string;
   @Prop()
-  old_price: string;
+  old_price: number;
   @Prop()
-  new_price: string;
+  new_price: number;
   @Prop()
   description: string;
-  @Prop()
-  coupon_picture: string;
   @Prop()
   category: [category];
   @Prop()
   coupon_type: dealType;
   @Prop()
-  date_validation: Date;
+  date_validation: string;
   @Prop()
   created_date: Date;
   @Prop()
@@ -32,7 +32,7 @@ export class Coupon {
   @Prop()
   images: string[];
   @Prop()
-  limit: string;
+  limit: number;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => User })
   user: User;
 }

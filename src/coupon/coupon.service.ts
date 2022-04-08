@@ -1,12 +1,11 @@
 import {
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Coupon, CouponDocument } from 'src/schemas/coupon.schema';
-
+import { CouponDocument } from 'src/schemas/coupon.schema';
+import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { UserDocument } from 'src/schemas/user.schema';
 import { CreateCouponDto } from 'src/dto/coupondto/create-coupon.dto';
@@ -17,13 +16,11 @@ export class CouponService {
     @InjectModel('Coupon') private CouponModel: Model<CouponDocument>,
     @InjectModel('User') private UserModel: Model<UserDocument>,
   ) {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async create(
-    createCouponDto: CreateCouponDto,
-    user_id: string,
-  ): Promise<Coupon> {
+
+  async createCoupon(createCouponDto: CreateCouponDto, user_id: string) {
     const {
       coupon_name,
+      price,
       old_price,
       new_price,
       description,
@@ -31,12 +28,14 @@ export class CouponService {
       coupon_type,
       date_validation,
       reduc_esti,
-       image,
+      image,
       limit,
     } = createCouponDto;
     const user = await this.UserModel.findById(user_id).exec();
+    console.log(user);
     const newCoupon = new this.CouponModel({
       coupon_name,
+      price,
       old_price,
       new_price,
       description,
@@ -44,20 +43,16 @@ export class CouponService {
       coupon_type,
       date_validation,
       reduc_esti,
+      created_date: moment().format(),
       limit,
       image,
       user,
     });
-    try {
-      console.log(user);
-      const result = await newCoupon.save();
-      await this.UserModel.findByIdAndUpdate(user_id, {
-        $push: { coupon: newCoupon },
-      }).exec();
-      return result;
-    } catch (error) {
-      throw new InternalServerErrorException('check your details');
-    }
+    const result = await newCoupon.save();
+    await this.UserModel.findByIdAndUpdate(user_id, {
+      $push: { coupon: newCoupon },
+    }).exec();
+    return { result, user };
   }
 
   findAll() {
@@ -67,6 +62,7 @@ export class CouponService {
   findOne(coupon_id: string) {
     return this.CouponModel.findById(coupon_id);
   }
+
   async updateCoupon(
     coupon_id: string,
     updateCouponDto: UpdateCouponDto,
