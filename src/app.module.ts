@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { DealModule } from './deal/deal.module';
 import { CouponModule } from './coupon/coupon.module';
 import { CartModule } from './cart/cart.module';
+import { SaveProductModule } from './save-product/save-product.module';
 
 
 @Module({
@@ -17,6 +18,7 @@ import { CartModule } from './cart/cart.module';
     DealModule,
     CouponModule,
     CartModule,
+    SaveProductModule,
   ],
 })
 export class AppModule {}

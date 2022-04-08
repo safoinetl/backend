@@ -1,7 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Document } from 'mongoose';
-import { address, education, links, professional } from 'src/dto/authDto/fields/fields';
+import {
+  address,
+  education,
+  links,
+  professional,
+} from 'src/dto/authDto/fields/fields';
 import { gender } from 'src/enum/gender-enum';
 import { role } from 'src/enum/Role-Enum';
 import { sold } from 'src/enum/userSold.enum';
@@ -10,6 +15,7 @@ import { v4 as uuid } from 'uuid';
 import { Cart } from './cart.schema';
 import { Coupon } from './coupon.schema';
 import { Deal } from './deal.schema';
+import { saveProduct } from './save-product.schema';
 
 export type UserDocument = User & Document;
 
@@ -29,7 +35,6 @@ export class User {
 
   @Prop({ type: String, required: true, trim: true, minlength: 6 })
   password: string;
-  
 
   @Prop()
   name: string;
@@ -79,5 +84,7 @@ export class User {
   coupon: Coupon[];
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => Cart })
   cart: Cart[];
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: () => saveProduct })
+  saveProduct: saveProduct[];
 }
 export const UserSchema = SchemaFactory.createForClass(User);

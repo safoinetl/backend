@@ -29,4 +29,11 @@ export class UserService {
     const getimage = this.UserModel.findOne({ ProfilePicture });
     return getimage;
   }
+  async getuserbyId(user_id: string) {
+    const findUserById = await this.UserModel.findById(user_id);
+    if (findUserById) {
+      findUserById.password = '';
+      return findUserById;
+    }
+  }
 }

@@ -21,7 +21,7 @@ import { v4 as uuid } from 'uuid';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateProfileDto } from 'src/dto/authDto/updating_profile_info.dto';
 import { category } from 'src/enum/category-enum';
- 
+
 @Controller('user')
 @UseGuards(AuthGuard('jwt'))
 export class UserController {
@@ -46,5 +46,9 @@ export class UserController {
   @Get('/user')
   async findOne(@GetUser('user') user: User): Promise<User> {
     return this.userService.findOne(user);
+  }
+  @Get('/user/:id')
+  getuserbyId(@Param('id') user_id: string) {
+    return this.userService.getuserbyId(user_id);
   }
 }

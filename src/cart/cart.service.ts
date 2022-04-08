@@ -20,30 +20,6 @@ export class CartService {
     @InjectModel('User') private UserModel: Model<UserDocument>,
     @InjectModel('Deal') private DealModel: Model<DealDocument>,
   ) {}
-
-  // async saveDeal(
-  //   deal_id: string,
-  //   user_id: string,
-  //   products: string,
-  //   CreateCartDto: CreateCartDto,
-  //   //price: number,
-  // ) {
-  //   const { quantity } = CreateCartDto;
-  //   const findDeal = await this.DealModel.findById(deal_id).exec();
-  //   const user = await this.UserModel.findById(user_id).exec();
-  //   const mount = quantity * findDeal.price;
-  //   console.log(mount);
-  //   const newCart = await new this.CartModel({
-  //     products: findDeal,
-  //     quantity,
-  //     totalPrice: mount,
-  //     user,
-  //     created: moment().format(),
-  //   });
-  //   console.log({ findDeal, newCart });
-  //   const saving = await newCart.save();
-  //   return saving;
-  // }
   async getCartById(user_id: string, cart_id: string) {
     const findCart = await this.CartModel.findById(cart_id);
     const findUser = await this.UserModel.findById(user_id);
@@ -95,32 +71,6 @@ export class CartService {
     });
     return newCart;
   }
-  // async updatecart(
-  //   cart_id: string,
-  //   updateCartDto: UpdateCartDto,
-  //   user_id: string,
-  //   deal_id: string,
-  // ) {
-  //   const { quantity } = updateCartDto;
-  //   const user = await this.UserModel.findById(user_id);
-  //   const findCart = await this.CartModel.findById(cart_id);
-  //   const findDeal = await this.DealModel.findById(deal_id).exec();
-
-  //   const totalPrice = quantity * findDeal.price; //it can be removed later
-
-  //   console.log({ user, findCart });
-  //   if (user._id.toString() !== findCart.user.toString()) {
-  //     console.log({ user, findCart });
-  //     throw new UnauthorizedException({
-  //       message: 'you are not allowed to make changes',
-  //     });
-  //   }
-  //   const newCart = await this.CartModel.findByIdAndUpdate(cart_id, {
-  //     updateCartDto,
-  //     totalPrice,
-  //   });
-  //   return newCart;
-  // }
 
   async remove(cart_id: string, user_id: string) {
     const user = await this.UserModel.findById(user_id);
@@ -134,28 +84,6 @@ export class CartService {
     await this.CartModel.findByIdAndRemove(cart_id);
     return 'deleted succesfully';
   }
-  // async saveCoupon(
-  //   coupon_id: string,
-  //   user_id: string,
-  //   products: string,
-  //   CreateCartDto: CreateCartDto,
-  // ) {
-  //   const { quantity } = CreateCartDto;
-  //   const findcoupon = await this.CouponModel.findById(coupon_id).exec();
-  //   const user = await this.UserModel.findById(user_id).exec();
-  //   const mount = quantity * findcoupon.price;
-  //   console.log(mount);
-  //   const newCart = new this.CartModel({
-  //     products: findcoupon,
-  //     quantity,
-  //     totalPrice: mount,
-  //     user,
-  //     created: moment().format(),
-  //   });
-  //   console.log({ findcoupon, newCart });
-  //   const saving = await newCart.save();
-  //   return saving;
-  // }
   async addToCart(
     user_id: string,
     createCartDto: CreateCartDto,
@@ -177,7 +105,6 @@ export class CartService {
       const newCart = new this.CartModel({
         products: findCoupon,
         quantity: quant,
-        quant,
         totalPrice: mount,
         user,
         created: moment().format(),
